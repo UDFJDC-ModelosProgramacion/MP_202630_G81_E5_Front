@@ -32,3 +32,5 @@ dist-ssr
 # Resultados de pruebas y cobertura
 coverage
 .vitest
+
+.scannerwork
