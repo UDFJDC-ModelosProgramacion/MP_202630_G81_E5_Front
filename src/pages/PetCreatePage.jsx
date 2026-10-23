@@ -17,7 +17,7 @@ export default function PetCreatePage() {
 
   const handleSubmit = async (values) => {
     await createPet(buildPetPayload(values));
-    navigate('/mascotas', { state: { message: 'Mascota registrada correctamente.' } });
+    await navigate('/mascotas', { state: { message: 'Mascota registrada correctamente.' } });
   };
 
   return (

@@ -13,7 +13,7 @@ export default function PetEditPage() {
 
   const handleSubmit = async (values) => {
     await updatePet(pet.id, buildPetPayload(values, pet));
-    navigate('/mascotas', { state: { message: 'Cambios guardados correctamente.' } });
+    await navigate('/mascotas', { state: { message: 'Cambios guardados correctamente.' } });
   };
 
   return (
