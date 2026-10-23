@@ -3,8 +3,9 @@ const NETWORK_MESSAGE = 'No se pudo conectar con el servidor. Verifica tu conexi
 
 export function getErrorMessage(error, fallback = DEFAULT_MESSAGE) {
   if (error?.response) {
-    return error.response.data?.message || fallback;
-  }
+  const data = error.response.data;
+  return data?.apierror?.message || data?.message || fallback;
+}
   if (error?.request) {
     return NETWORK_MESSAGE;
   }

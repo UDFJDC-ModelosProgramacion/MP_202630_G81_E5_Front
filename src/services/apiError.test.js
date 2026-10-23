@@ -19,6 +19,10 @@ describe('getErrorMessage', () => {
   it('devuelve el mensaje por defecto ante errores desconocidos', () => {
     expect(getErrorMessage(new Error('x'))).toMatch(/error inesperado/);
   });
+  it('lee el mensaje anidado en apierror', () => {
+  const error = { response: { status: 412, data: { apierror: { message: 'Shelter is not valid' } } } };
+  expect(getErrorMessage(error)).toBe('Shelter is not valid');
+  });
 });
 
 describe('isNotFound', () => {
