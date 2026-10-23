@@ -44,4 +44,13 @@ describe('PetListPage', () => {
     expect(await screen.findByText('Luna')).toBeTruthy();
     expect(getPets).toHaveBeenCalledTimes(2);
   });
+    it('muestra el mensaje de éxito que llega desde el formulario', async () => {
+    getPets.mockResolvedValue(pets);
+    render(
+      <MemoryRouter initialEntries={[{ pathname: '/mascotas', state: { message: 'Mascota registrada correctamente.' } }]}>
+        <PetListPage />
+      </MemoryRouter>,
+    );
+    expect(await screen.findByText('Mascota registrada correctamente.')).toBeTruthy();
+  });
 });

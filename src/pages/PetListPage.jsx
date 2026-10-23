@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import AlertMessage from '../components/AlertMessage';
 import Loader from '../components/Loader';
 import PetTable from '../components/PetTable';
@@ -6,6 +6,7 @@ import usePets from '../hooks/usePets';
 
 export default function PetListPage() {
   const { pets, loading, error, reload } = usePets();
+  const successMessage = useLocation().state?.message;
 
   return (
     <section>
@@ -20,6 +21,8 @@ export default function PetListPage() {
           + Registrar mascota
         </Link>
       </div>
+
+      {successMessage && <AlertMessage variant="success">{successMessage}</AlertMessage>}
 
       {loading && <Loader label="Cargando mascotas..." />}
 
