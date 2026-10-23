@@ -1,12 +1,39 @@
+import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import AlertMessage from '../components/AlertMessage';
 import Loader from '../components/Loader';
 import PetTable from '../components/PetTable';
 import usePets from '../hooks/usePets';
+import { isNotFound } from '../services/apiError';
+import { deletePet } from '../services/petService';
+import { getDeleteErrorMessage } from '../utils/petMessages';
 
 export default function PetListPage() {
-  const { pets, loading, error, reload } = usePets();
-  const successMessage = useLocation().state?.message;
+  const { pets, loading, error, reload, removePet } = usePets();
+  const location = useLocation();
+  const [feedback, setFeedback] = useState(() =>
+    location.state?.message ? { type: 'success', message: location.state.message } : null,
+  );
+  const [deletingId, setDeletingId] = useState(null);
+
+  const handleDelete = async (pet) => {
+    if (!window.confirm(`¿Eliminar a ${pet.name}? Esta acción no se puede deshacer.`)) {
+      return;
+    }
+
+    setFeedback(null);
+    setDeletingId(pet.id);
+    try {
+      await deletePet(pet.id);
+      removePet(pet.id);
+      setFeedback({ type: 'success', message: `Mascota ${pet.name} eliminada correctamente.` });
+    } catch (deleteError) {
+      if (isNotFound(deleteError)) removePet(pet.id);
+      setFeedback({ type: 'error', message: getDeleteErrorMessage(deleteError, pet) });
+    } finally {
+      setDeletingId(null);
+    }
+  };
 
   return (
     <section>
@@ -22,7 +49,7 @@ export default function PetListPage() {
         </Link>
       </div>
 
-      {successMessage && <AlertMessage variant="success">{successMessage}</AlertMessage>}
+      {feedback && <AlertMessage variant={feedback.type}>{feedback.message}</AlertMessage>}
 
       {loading && <Loader label="Cargando mascotas..." />}
 
@@ -39,7 +66,9 @@ export default function PetListPage() {
         <p className="empty-state">Aún no hay mascotas registradas.</p>
       )}
 
-      {!loading && !error && pets.length > 0 && <PetTable pets={pets} />}
+      {!loading && !error && pets.length > 0 && (
+        <PetTable pets={pets} onDelete={handleDelete} deletingId={deletingId} />
+      )}
     </section>
   );
 }

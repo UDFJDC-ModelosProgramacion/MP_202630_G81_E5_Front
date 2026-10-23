@@ -46,4 +46,10 @@ describe('PetTable', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Eliminar Luna' }));
     expect(onDelete).toHaveBeenCalledWith(pets[0]);
   });
+  
+  it('deshabilita Eliminar solo en la mascota que se está eliminando', () => {
+    renderTable({ onDelete: vi.fn(), deletingId: 1 });
+    expect(screen.getByRole('button', { name: 'Eliminar Luna' }).disabled).toBe(true);
+    expect(screen.getByRole('button', { name: 'Eliminar Rocky' }).disabled).toBe(false);
+  });
 });

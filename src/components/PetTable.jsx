@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import StatusBadge from './StatusBadge';
 import { formatAge, formatPetType } from '../utils/formatters';
 
-export default function PetTable({ pets, onDelete }) {
+export default function PetTable({ pets, onDelete, deletingId = null }) {
   const count = `Mostrando ${pets.length} ${pets.length === 1 ? 'mascota' : 'mascotas'}`;
 
   return (
@@ -55,6 +55,7 @@ export default function PetTable({ pets, onDelete }) {
                         type="button"
                         className="pet-table__action pet-table__action--danger"
                         aria-label={`Eliminar ${pet.name}`}
+                        disabled={deletingId === pet.id}
                         onClick={() => onDelete(pet)}
                       >
                         Eliminar

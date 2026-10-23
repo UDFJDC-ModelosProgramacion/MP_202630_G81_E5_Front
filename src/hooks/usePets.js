@@ -25,5 +25,9 @@ export default function usePets() {
     setReloadKey((key) => key + 1);
   }, []);
 
-  return { ...state, reload };
+  const removePet = useCallback((id) => {
+    setState((prev) => ({ ...prev, pets: prev.pets.filter((pet) => pet.id !== id) }));
+  }, []);
+
+  return { ...state, reload, removePet };
 }
