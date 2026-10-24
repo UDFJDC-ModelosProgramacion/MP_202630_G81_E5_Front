@@ -211,3 +211,22 @@ select.form-control-brand {
   .adoption-filters { flex-direction: column; align-items: stretch; }
   .adoption-filters__status { flex-basis: auto; }
 }
+
+.adoption-form__row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.adoption-form__hint { margin: 10px 0 0; font-size: 15px; color: var(--color-muted); }
+@media (max-width: 720px) {
+  .adoption-form__row { grid-template-columns: 1fr; gap: 0; }
+}
+
+.adoption-actions { margin-top: 24px; }
+.adoption-actions__title { margin: 0 0 20px; font-size: 22px; font-weight: 800; }
+.adoption-status-form { display: flex; align-items: flex-end; gap: 16px; }
+.adoption-status-form .form-field { flex: 1 1 auto; margin-bottom: 0; }
+.adoption-status-form__submit { flex: 0 0 auto; }
+.adoption-actions .alert-message { margin-bottom: 20px; }
+.adoption-btn-danger { color: var(--color-error); border-color: var(--color-error); }
+.adoption-btn-danger:disabled { opacity: 0.6; cursor: not-allowed; }
+@media (max-width: 720px) {
+  .adoption-status-form { flex-direction: column; align-items: stretch; }
+  .adoption-status-form .form-field { margin-bottom: 8px; }
+}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { getAdoption } from '../services/adoptionService';
 import { getErrorMessage, isNotFound } from '../services/apiError';
 
@@ -31,5 +31,9 @@ export default function useAdoption(id) {
     };
   }, [id]);
 
-  return state;
+  const setAdoption = useCallback((adoption) => {
+    setState((prev) => ({ ...prev, adoption }));
+  }, []);
+
+  return { ...state, setAdoption };
 }

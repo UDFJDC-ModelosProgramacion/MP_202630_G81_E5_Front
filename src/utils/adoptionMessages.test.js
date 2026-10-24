@@ -3,7 +3,9 @@ import {
   ADOPTION_NOT_FOUND_MESSAGE,
   PET_UNAVAILABLE_MESSAGE,
   getAdoptionPetName,
+  getCreateErrorMessage,
   getDeleteErrorMessage,
+  getMissingDataMessage,
   getStatusErrorMessage,
   isPetUnavailableError,
 } from './adoptionMessages';
@@ -34,6 +36,52 @@ describe('getAdoptionPetName', () => {
     expect(getAdoptionPetName(adoption)).toBe('Luna');
     expect(getAdoptionPetName({ pet: null })).toBe('la mascota');
     expect(getAdoptionPetName(undefined)).toBe('la mascota');
+  });
+});
+
+describe('getCreateErrorMessage', () => {
+  it('traduce el 404 del adoptante', () => {
+    expect(getCreateErrorMessage(apiError(404, 'The adopter with the given id was not found'))).toBe(
+      'El adoptante seleccionado no fue encontrado.',
+    );
+  });
+
+  it('traduce el 404 del veterinario', () => {
+    expect(
+      getCreateErrorMessage(apiError(404, 'The veterinarian with the given id was not found')),
+    ).toBe('El veterinario seleccionado no fue encontrado.');
+  });
+
+  it('traduce el 404 de la mascota', () => {
+    expect(getCreateErrorMessage(apiError(404, 'The pet with the given id was not found'))).toBe(
+      'La mascota seleccionada no fue encontrada.',
+    );
+  });
+
+  it('muestra el mensaje del back cuando no reconoce el 404', () => {
+    expect(getCreateErrorMessage(apiError(404, 'Algo no existe'))).toBe('Algo no existe');
+  });
+
+  it('muestra el mensaje del back en otros errores y el de conexión si no hay respuesta', () => {
+    expect(getCreateErrorMessage(apiError(412, 'Adoption data is not valid'))).toBe(
+      'Adoption data is not valid',
+    );
+    expect(getCreateErrorMessage({ request: {} })).toMatch(/conectar con el servidor/);
+  });
+});
+
+describe('getMissingDataMessage', () => {
+  it('devuelve null cuando hay mascotas, adoptantes y veterinarios', () => {
+    expect(getMissingDataMessage({ pets: [1], adopters: [1], veterinarians: [1] })).toBeNull();
+  });
+
+  it('lista lo que falta', () => {
+    expect(getMissingDataMessage({ pets: [], adopters: [1], veterinarians: [1] })).toBe(
+      'Faltan datos para registrar una adopción: no hay mascotas.',
+    );
+    expect(getMissingDataMessage({ pets: [1], adopters: [], veterinarians: [] })).toBe(
+      'Faltan datos para registrar una adopción: no hay adoptantes, veterinarios.',
+    );
   });
 });
 
