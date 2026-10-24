@@ -1,6 +1,12 @@
 import { NavLink } from 'react-router-dom';
 
-const pendingLinks = ['Adoptantes', 'Adopciones', 'Refugios'];
+// Las secciones sin `to` siguen deshabilitadas hasta que se implemente su historia.
+const navItems = [
+  { label: 'Mascotas', to: '/mascotas' },
+  { label: 'Adoptantes' },
+  { label: 'Adopciones', to: '/adopciones' },
+  { label: 'Refugios' },
+];
 
 export default function Header() {
   return (
@@ -18,26 +24,30 @@ export default function Header() {
         <span className="app-brand__name">AdoptaYa</span>
       </div>
 
-      <nav className="app-nav" aria-label="Principal">
-        <NavLink
-          to="/mascotas"
-          className={({ isActive }) =>
-            `app-nav__link${isActive ? ' app-nav__link--active' : ''}`
-          }
-        >
-          Mascotas
-        </NavLink>
-        {pendingLinks.map((label) => (
-          <a
-            key={label}
-            href="#"
-            className="app-nav__link"
-            aria-disabled="true"
-            onClick={(e) => e.preventDefault()}
-          >
-            {label}
-          </a>
-        ))}
+            <nav className="app-nav" aria-label="Principal">
+        {navItems.map(({ label, to }) =>
+          to ? (
+            <NavLink
+              key={label}
+              to={to}
+              className={({ isActive }) =>
+                `app-nav__link${isActive ? ' app-nav__link--active' : ''}`
+              }
+            >
+              {label}
+            </NavLink>
+          ) : (
+            <a
+              key={label}
+              href="#"
+              className="app-nav__link"
+              aria-disabled="true"
+              onClick={(e) => e.preventDefault()}
+            >
+              {label}
+            </a>
+          ),
+        )}
       </nav>
 
       <div className="app-user">
