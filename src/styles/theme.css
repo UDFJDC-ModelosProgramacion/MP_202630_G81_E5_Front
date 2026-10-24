@@ -187,3 +187,27 @@ select.form-control-brand {
 .btn-brand:disabled { opacity: 0.6; cursor: not-allowed; }
 
 .pet-table__action:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ===== Adopciones (HU05) ===== */
+.adoption-filters { display: flex; align-items: flex-end; gap: 22px; margin-bottom: 32px; }
+.adoption-filters .form-field { margin-bottom: 0; }
+.adoption-filters__search { flex: 1 1 auto; min-width: 0; }
+.adoption-filters__status { flex: 0 0 260px; }
+
+.adoption-table { min-width: 980px; }
+.adoption-table th:nth-child(1) { width: 19%; }
+.adoption-table th:nth-child(2) { width: 17%; }
+.adoption-table th:nth-child(3) { width: 21%; }
+.adoption-table th:nth-child(4) { width: 14%; }
+.adoption-table th:nth-child(5) { width: 15%; }
+.adoption-table th:nth-child(6) { width: 14%; }
+
+.adoption-status { background: var(--color-bg); color: var(--color-muted); }
+.adoption-status--in-progress { background: #fdf3da; color: #8a5a00; }
+.adoption-status--approved { background: var(--color-success-soft); color: var(--color-success); }
+.adoption-status--returned { background: var(--color-info-soft); color: var(--color-info); }
+
+@media (max-width: 720px) {
+  .adoption-filters { flex-direction: column; align-items: stretch; }
+  .adoption-filters__status { flex-basis: auto; }
+}

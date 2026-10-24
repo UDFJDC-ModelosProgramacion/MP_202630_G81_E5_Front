@@ -1,5 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout';
+import AdoptionDetailPage from '../pages/AdoptionDetailPage';
+import AdoptionListPage from '../pages/AdoptionListPage';
 import PetCreatePage from '../pages/PetCreatePage';
 import PetDetailPage from '../pages/PetDetailPage';
 import PetEditPage from '../pages/PetEditPage';
@@ -14,6 +16,8 @@ export default function AppRoutes() {
         <Route path="/mascotas/nueva" element={<PetCreatePage />} />
         <Route path="/mascotas/:id" element={<PetDetailPage />} />
         <Route path="/mascotas/:id/editar" element={<PetEditPage />} />
+        <Route path="/adopciones" element={<AdoptionListPage />} />
+        <Route path="/adopciones/:id" element={<AdoptionDetailPage />} />
       </Route>
     </Routes>
   );
