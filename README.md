@@ -1,158 +1,142 @@
-# MP_202630_G81_E5_Front
+# AdoptaYa — Front-end
 
-Front-end del sistema de adopción de mascotas, desarrollado para el curso Modelos de Programación. Es una aplicación web que consume la API RESTful del back-end (repositorio `MP_202630_G81_E5_Back`).
+Interfaz web del sistema de adopción de mascotas (curso Modelos de Programación, equipo G81-E5). Consume la API REST del back-end (`MP_202630_G81_E5_Back`).
 
-## Tecnologías utilizadas
+## Tecnologías
 
-| Área | Tecnología |
-| --- | --- |
-| Librería y empaquetador | React + Vite 8 |
-| Lenguaje | JavaScript (ES6+) |
-| Estilos | Bootstrap |
-| Calidad de código | ESLint |
-| Pruebas | Vitest + React Testing Library (cobertura con v8, reporte lcov) |
-| Análisis estático | SonarQube Community + `@sonar/scan` |
-| Integración continua | Jenkins (pipeline declarativo en `Jenkinsfile`) |
-| Infraestructura local | Docker y Docker Compose |
+- React + Vite (JavaScript, sin TypeScript)
+- React Router, Axios
+- Bootstrap + estilos propios (`src/styles/theme.css`)
+- ESLint
+- Vitest + React Testing Library (cobertura con v8)
+- Docker Compose: Jenkins y SonarQube locales (`infra/`)
 
-## Requisitos previos
+## Requisitos
 
-- Node.js 24 y npm 11 (o superior).
-- Back-end en ejecución, por defecto en `http://localhost:8080/api`.
-- Docker Desktop, solo si se quiere levantar Jenkins y SonarQube en local.
+- Node.js y npm (probado con Node v24 y npm 11)
+- Back-end en ejecución en `http://localhost:8080` (prefijo `/api`)
+- Docker Desktop (solo para Jenkins y SonarQube)
 
 ## Instalación y ejecución
 
-1. Clonar el repositorio e instalar las dependencias:
+```powershell
+git clone <url-del-repositorio>
+cd MP_202630_G81_E5_Front
+npm install
+Copy-Item .env.example .env
+npm run dev
+```
 
-   ```bash
-   git clone https://github.com/UDFJDC-ModelosProgramacion/MP_202630_G81_E5_Front.git
-   cd MP_202630_G81_E5_Front
-   npm install
-   ```
+La aplicación queda en `http://localhost:5173`.
 
-2. Crear el archivo de variables de entorno a partir del ejemplo:
+### Variables de entorno
 
-   ```bash
-   cp .env.example .env
-   ```
+| Variable | Descripción | Valor por defecto |
+| --- | --- | --- |
+| `VITE_API_URL` | URL base de la API | `http://localhost:8080/api` |
 
-   En PowerShell: `Copy-Item .env.example .env`.
-
-   | Variable | Descripción | Valor por defecto |
-   | --- | --- | --- |
-   | `VITE_API_URL` | URL base de la API del back-end | `http://localhost:8080/api` |
-
-3. Iniciar el servidor de desarrollo:
-
-   ```bash
-   npm run dev
-   ```
-
-   Vite indica en la consola la URL local (por defecto `http://localhost:5173`).
-
-## Scripts disponibles
+### Scripts
 
 | Comando | Descripción |
 | --- | --- |
-| `npm run dev` | Servidor de desarrollo con recarga en caliente |
-| `npm run build` | Genera la versión de producción en `dist/` |
-| `npm run preview` | Sirve localmente la versión de producción |
-| `npm run lint` | Ejecuta ESLint sobre el proyecto |
-| `npm test` | Ejecuta las pruebas una vez |
-| `npm run test:watch` | Ejecuta las pruebas en modo observación |
-| `npm run test:coverage` | Ejecuta las pruebas y genera la cobertura en `coverage/` |
-| `npm run sonar` | Envía el análisis a SonarQube (requiere la cobertura generada) |
+| `npm run dev` | Servidor de desarrollo |
+| `npm run build` | Build de producción |
+| `npm run lint` | Análisis estático con ESLint |
+| `npm run test:coverage` | Pruebas unitarias con cobertura (`coverage/lcov.info`) |
+
+## Historias de usuario implementadas
+
+### HU01 — Registrar mascota
+
+Como administrador de refugio quiero registrar una mascota con nombre, especie y edad válidos para publicarla como disponible para adopción.
+
+**Cómo visualizarla**
+
+1. Levanta el back-end y carga datos de prueba (la base se borra al reiniciar el back):
+   ```powershell
+   .\infra\seed-data.ps1
+   ```
+2. Ejecuta `npm run dev` y abre `http://localhost:5173/mascotas`.
+
+| Criterio de aceptación | Dónde verlo |
+| --- | --- |
+| 1. Crear mascota válida | `/mascotas/nueva` → "Registrar mascota"; aparece en el listado |
+| 2. Nombre o especie inválidos | En el formulario, dejar vacío nombre o especie → mensaje de error |
+| 3. Edad inválida (0 es válida) | Edad `-1` → error; edad `0` → se guarda |
+| 4. Refugio ausente o inexistente | No seleccionar refugio → error; si el back lo rechaza, se muestra su mensaje |
+| 5. Consultar mascotas | `/mascotas` (listado) y clic en el nombre → `/mascotas/:id`; si no existe, "Mascota no encontrada." |
+| 6. Editar mascota | Botón "Editar" → `/mascotas/:id/editar`; conserva el refugio; datos inválidos se rechazan |
+| 7. Borrar mascota | Botón "Eliminar"; con adopciones o fotos asociadas se muestra el error; si no existe, "Mascota no encontrada." |
+
+### HU05 — Registrar adopción
+
+Como administrador de refugio quiero registrar una adopción con fecha, estado, mascota, adoptante y veterinario responsable válidos para formalizar y hacer seguimiento al proceso.
+
+**Cómo visualizarla**
+
+1. Levanta el back-end y carga datos de prueba (la base se borra al reiniciar el back; el script se ejecuta una sola vez por arranque):
+   ```powershell
+   .\infra\seed-adoptions.ps1
+   ```
+   Crea 1 refugio, 2 veterinarios, 5 adoptantes, 7 mascotas y 5 adopciones (En curso, Aprobada y Devuelta). Toby y Mia quedan disponibles para probar el formulario. Si PowerShell bloquea el script: `powershell -ExecutionPolicy Bypass -File .\infra\seed-adoptions.ps1`.
+2. Ejecuta `npm run dev` y abre `http://localhost:5173/adopciones`.
+
+| Criterio de aceptación | Dónde verlo |
+| --- | --- |
+| 1. Crear adopción válida | `/adopciones/nueva` → elegir una mascota disponible (Toby o Mia), adoptante, veterinario y fecha → "Registrar adopción"; aparece en el listado y la mascota deja de estar disponible |
+| 2. Estado por defecto | En el formulario el estado es opcional y arranca en "En curso"; se guarda como `IN_PROGRESS` |
+| 3. Datos obligatorios | Dejar vacío mascota, adoptante, veterinario o fecha → mensaje de error bajo cada campo |
+| 4. Referencias inexistentes | Si el back responde 404 por adoptante, veterinario o mascota, se muestra "… no fue encontrado" y no se crea la adopción |
+| 5. Mascota no disponible | Elegir una mascota ya adoptada (por ejemplo Luna) → "Esta mascota ya no está disponible para adopción. Elige otra." |
+| 6. Consultar adopciones | `/adopciones` (listado con búsqueda y filtro por estado) y "Ver detalle" → `/adopciones/:id` con mascota, adoptante y veterinario; si no existe, "Adopción no encontrada." |
+| 7. Actualizar estado | En el detalle, "Cambiar estado" → "Guardar estado"; un estado no válido se rechaza |
+| 8. Mascota inmodificable | El cambio de estado solo envía fecha y estado; la adopción conserva su mascota original |
+| 9. Borrar adopción | En el detalle, "Eliminar adopción" (con confirmación); vuelve al listado y ya no aparece |
+
+## Pruebas
+
+```powershell
+npm run test:coverage
+```
+
+Cada funcionalidad incluye pruebas unitarias (servicios, utilidades, hooks, componentes y páginas) con los servicios de API simulados.
+
+## Calidad: Jenkins y SonarQube
+
+La infraestructura se levanta con Docker Compose desde `infra/`:
+
+```powershell
+docker compose -f infra/docker-compose.yml up -d
+```
+
+| Servicio | URL |
+| --- | --- |
+| SonarQube | `http://localhost:9000` |
+| Jenkins | `http://localhost:8081` |
+
+El `Jenkinsfile` ejecuta lint, build, pruebas con cobertura y el análisis de SonarQube, esperando el Quality Gate (configuración en `sonar-project.properties`).
+
+## Flujo de trabajo (Git Flow)
+
+- Una rama por historia: `feature/nombre-de-la-historia-id` (ej. `feature/registrar-mascota-hu01`).
+- Prohibido subir directo a `main` o `develop`.
+- Todo cambio entra por Pull Request con la aprobación de al menos un compañero.
 
 ## Estructura del proyecto
 
 ```
 src/
-├── assets/       Recursos estáticos
-├── components/   Componentes reutilizables
-├── layouts/      Estructuras de página
-├── pages/        Vistas de la aplicación
-├── routes/       Configuración de rutas
-├── services/     Consumo de la API
-└── styles/       Estilos globales
-infra/            Docker Compose de Jenkins y SonarQube
-Jenkinsfile       Pipeline de integración continua
+  components/   componentes reutilizables (Header, PetForm, PetTable, ...)
+  hooks/        carga de datos (usePets, usePet, useShelters)
+  layouts/      layout principal
+  pages/        páginas de las rutas
+  routes/       definición de rutas
+  services/     cliente HTTP, servicios de API y mapeo de datos
+  styles/       tema global
+  utils/        validaciones, formateo y mensajes
+infra/          Jenkins, SonarQube y datos de prueba
 ```
 
-## Pruebas
+## Notas
 
-Las pruebas automatizadas usan Vitest y React Testing Library, y viven junto al código con la extensión `.test.js` o `.test.jsx`.
-
-```bash
-npm test
-npm run test:coverage
-```
-
-El reporte de cobertura queda en `coverage/lcov.info` y es el que lee SonarQube.
-
-## Calidad: Jenkins y SonarQube
-
-La carpeta `infra/` contiene un `docker-compose.yml` que levanta ambos servidores en la red `calidad-net`.
-
-| Servicio | URL desde el equipo | URL desde otros contenedores |
-| --- | --- | --- |
-| SonarQube | http://localhost:9000 | http://sonarqube:9000 |
-| Jenkins | http://localhost:8081 | http://jenkins:8080 |
-
-### Puesta en marcha
-
-1. Levantar la infraestructura (la primera vez construye la imagen de Jenkins, que incluye Node.js y los plugins de `infra/jenkins/plugins.txt`):
-
-   ```bash
-   docker compose -f infra/docker-compose.yml up -d --build
-   ```
-
-2. **SonarQube:** entrar a http://localhost:9000 (usuario `admin`, contraseña inicial `admin`; pide cambiarla) y generar un token en *My Account > Security*.
-
-3. **Jenkins:** entrar a http://localhost:8081. La contraseña inicial se obtiene con:
-
-   ```bash
-   docker exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword
-   ```
-
-   Completar el asistente inicial y crear la credencial con el token de SonarQube: *Manage Jenkins > Credentials*, tipo **Secret text**, ID `sonar-token`.
-
-4. Crear el job: *New Item > Pipeline*, y en la sección Pipeline elegir:
-   - **Definition:** Pipeline script from SCM
-   - **SCM:** Git, con la URL del repositorio (público, no requiere credencial)
-   - **Branch Specifier:** la rama a construir (por ejemplo `*/develop`)
-   - **Script Path:** `Jenkinsfile`
-
-5. Ejecutar **Build Now**.
-
-### Pipeline
-
-El `Jenkinsfile` define cuatro etapas:
-
-1. **Checkout:** obtiene el código del repositorio.
-2. **Build:** `npm ci`, `npm run lint` y `npm run build`.
-3. **Testing:** `npm run test:coverage`.
-4. **Static Analysis:** análisis en SonarQube con `-Dsonar.qualitygate.wait=true`, por lo que el build falla si no se cumple el Quality Gate.
-
-### Quality Gate
-
-Se usa el Quality Gate por defecto de SonarQube (*Sonar way*) con el periodo de código nuevo por defecto. Cada funcionalidad debe incluir pruebas unitarias para mantener o mejorar la cobertura del código nuevo.
-
-### Análisis manual (opcional)
-
-Con SonarQube en ejecución, desde la raíz del proyecto:
-
-```bash
-npm run test:coverage
-npm run sonar -- -Dsonar.host.url=http://localhost:9000 -Dsonar.token=<TOKEN>
-```
-
-## Nota sobre `npm audit` (node-forge)
-
-`npm audit` reporta una advertencia sobre `node-forge`, dependencia transitiva de `@sonar/scan`. Al momento de configurar el proyecto no existía una versión corregida. El equipo decidió aceptar el aviso porque `@sonar/scan` se usa solo en desarrollo y en integración continua, y no forma parte de lo que se despliega. Se revisará si aparece un parche.
-
-## Flujo de trabajo (Git Flow)
-
-- No se sube código directamente a `main` ni a `develop`.
-- Cada historia de usuario se desarrolla en una rama `feature/nombre-de-la-historia-id` creada desde `develop`.
-- Todo cambio entra mediante Pull Request hacia `develop`, con la aprobación de al menos un compañero.
+- `npm audit` reporta una vulnerabilidad en `node-forge`, dependencia transitiva de `@sonar/scan`. Es solo de desarrollo (no llega al build) y no tiene parche disponible; se acepta y documenta.
