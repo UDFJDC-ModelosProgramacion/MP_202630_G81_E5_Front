@@ -25,5 +25,9 @@ export default function useReviews(adopterId) {
     setReloadKey((key) => key + 1);
   }, []);
 
-  return { ...state, reload };
+  const setReviews = useCallback((update) => {
+    setState((prev) => ({ ...prev, reviews: update(prev.reviews) }));
+  }, []);
+
+  return { ...state, reload, setReviews };
 }

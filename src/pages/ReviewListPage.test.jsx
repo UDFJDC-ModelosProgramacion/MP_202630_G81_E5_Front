@@ -2,10 +2,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import { getReviews } from '../services/reviewService';
+import { createReview, getReviews } from '../services/reviewService';
 import ReviewListPage from './ReviewListPage';
 
-vi.mock('../services/reviewService', () => ({ getReviews: vi.fn() }));
+vi.mock('../services/reviewService', () => ({ getReviews: vi.fn(), createReview: vi.fn() }));
 
 const reviews = [
   { id: 1, rating: 5, comment: 'Todo salió muy bien', adopter: { id: 7, name: 'Laura Gómez' } },
@@ -71,5 +71,52 @@ describe('ReviewListPage', () => {
     getReviews.mockResolvedValue(reviews);
     renderPage({ message: 'Reseña publicada correctamente.' });
     expect((await screen.findByText('Reseña publicada correctamente.')).closest('[role="status"]')).toBeTruthy();
+  });
+
+  it('publica una reseña válida y la agrega a la lista con el promedio actualizado', async () => {
+    getReviews.mockResolvedValue([reviews[0]]);
+    createReview.mockResolvedValue({ id: 9, rating: 3, comment: 'Regular', adopter: reviews[0].adopter });
+    renderPage();
+    await screen.findByText('Todo salió muy bien');
+    expect(screen.getByText('5,0')).toBeTruthy();
+
+    fireEvent.click(screen.getByRole('radio', { name: '3 estrellas' }));
+    fireEvent.change(screen.getByLabelText(/^Comentario/), { target: { value: ' Regular ' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Publicar reseña' }));
+
+    expect(await screen.findByText('Regular', { selector: 'p' })).toBeTruthy();
+    expect(createReview).toHaveBeenCalledWith('7', { rating: 3, comment: 'Regular' });
+    expect(screen.getByText('Reseña publicada correctamente.')).toBeTruthy();
+    expect(screen.getAllByRole('listitem')).toHaveLength(2);
+    expect(screen.getByText('4,0')).toBeTruthy();
+    expect(screen.getByRole('radio', { name: '3 estrellas' }).checked).toBe(false);
+    expect(screen.getByLabelText(/^Comentario/).value).toBe('');
+  });
+
+  it('no envía la reseña cuando falta la calificación', async () => {
+    getReviews.mockResolvedValue([]);
+    renderPage();
+    await screen.findByText('Aún no has publicado ninguna reseña.');
+    fireEvent.click(screen.getByRole('button', { name: 'Publicar reseña' }));
+    expect(screen.getByText('Elige una calificación de 1 a 5.')).toBeTruthy();
+    expect(createReview).not.toHaveBeenCalled();
+  });
+
+  it('muestra el rechazo del servidor sin agregar la reseña', async () => {
+    getReviews.mockResolvedValue([]);
+    createReview.mockRejectedValue(apiError(404, 'The adopter with the given id was not found'));
+    renderPage();
+    await screen.findByText('Aún no has publicado ninguna reseña.');
+    fireEvent.click(screen.getByRole('radio', { name: '4 estrellas' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Publicar reseña' }));
+    expect((await screen.findByRole('alert')).textContent).toContain('Adoptante no encontrado.');
+    expect(screen.getByText('Aún no has publicado ninguna reseña.')).toBeTruthy();
+  });
+
+  it('no muestra el formulario cuando el adoptante no existe', async () => {
+    getReviews.mockRejectedValue(apiError(404, 'The adopter with the given id was not found'));
+    renderPage();
+    await screen.findByRole('alert');
+    expect(screen.queryByRole('heading', { name: 'Nueva reseña' })).toBeNull();
   });
 });
