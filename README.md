@@ -93,6 +93,30 @@ Como administrador de refugio quiero registrar una adopción con fecha, estado, 
 | 8. Mascota inmodificable | El cambio de estado solo envía fecha y estado; la adopción conserva su mascota original |
 | 9. Borrar adopción | En el detalle, "Eliminar adopción" (con confirmación); vuelve al listado y ya no aparece |
 
+
+### HU04 — Calificar el proceso de adopción
+
+Como adoptante quiero calificar el proceso de adopción con una calificación de 1 a 5 y un comentario opcional para compartir mi experiencia y ayudar a mejorar el servicio.
+
+**Cómo visualizarla**
+
+1. Levanta el back-end y carga datos de prueba (la base se borra al reiniciar el back; el script se ejecuta una sola vez por arranque):
+   ```powershell
+   .\infra\seed-reviews.ps1
+   ```
+   Crea (o reutiliza) a Laura Gómez, con 3 reseñas (5, 4 y 4), y a Carlos Pérez, con 2 reseñas (una sin comentario). Si PowerShell bloquea el script: `powershell -ExecutionPolicy Bypass -File .\infra\seed-reviews.ps1`.
+2. Ejecuta `npm run dev` y abre `http://localhost:5173/mis-resenas`. Como todavía no hay inicio de sesión, "Mis reseñas" abre las reseñas del primer adoptante registrado (Laura).
+
+| Criterio de aceptación | Dónde verlo |
+| --- | --- |
+| 1. Crear reseña válida | En el panel "Nueva reseña", elegir de 1 a 5 estrellas y, si se quiere, un comentario → "Publicar reseña"; aparece en la lista y el promedio se actualiza |
+| 2. Calificación inválida o ausente | "Publicar reseña" sin elegir estrellas → "Elige una calificación de 1 a 5."; si el back rechaza una calificación fuera de rango, se muestra su mensaje y no se crea la reseña |
+| 3. Adoptante inexistente | `/adoptantes/9999/resenas` → "Adoptante no encontrado."; no se muestra el formulario |
+| 4. Consultar reseñas | `/mis-resenas` (lista con promedio) y "Ver detalle" → `/adoptantes/:adopterId/resenas/:reviewId` |
+| 5. Reseña de otro adoptante | El script imprime una URL con la reseña de Carlos bajo el adoptante de Laura → "Esta reseña pertenece a otro adoptante."; lo mismo ocurre al editarla o eliminarla |
+| 6. Editar reseña | "Editar" en una tarjeta → el panel pasa a "Editar reseña" → "Guardar cambios"; una calificación inválida se rechaza |
+| 7. Eliminar reseña | "Eliminar" (con confirmación); la reseña desaparece de la lista |
+
 ## Pruebas
 
 ```powershell
