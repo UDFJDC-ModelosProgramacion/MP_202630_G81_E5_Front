@@ -99,4 +99,41 @@ describe('ReviewForm', () => {
       expect(screen.getByRole('button', { name: 'Publicar reseña' }).disabled).toBe(false),
     );
   });
+
+  it('no ofrece cancelar si no se pasa la acción', () => {
+    renderForm();
+    expect(screen.queryByRole('button', { name: 'Cancelar' })).toBeNull();
+  });
+
+  it('ofrece cancelar cuando se está editando', () => {
+    const onCancel = vi.fn();
+    renderForm({ onCancel });
+    fireEvent.click(screen.getByRole('button', { name: 'Cancelar' }));
+    expect(onCancel).toHaveBeenCalled();
+  });
+
+  it('carga los valores iniciales para editar', () => {
+    renderForm({ initialValues: { rating: 2, comment: 'Mejorable' } });
+    expect(screen.getByRole('radio', { name: '2 estrellas' }).checked).toBe(true);
+    expect(screen.getByLabelText(/^Comentario/).value).toBe('Mejorable');
+  });
+
+  it('solo ofrece cancelar cuando recibe la acción', () => {
+    const onCancel = vi.fn();
+    const { unmount } = render(
+      <ReviewForm initialValues={EMPTY_REVIEW_FORM} submitLabel="Guardar" onSubmit={vi.fn()} />,
+    );
+    expect(screen.queryByRole('button', { name: 'Cancelar' })).toBeNull();
+    unmount();
+    render(
+      <ReviewForm
+        initialValues={EMPTY_REVIEW_FORM}
+        submitLabel="Guardar"
+        onSubmit={vi.fn()}
+        onCancel={onCancel}
+      />,
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'Cancelar' }));
+    expect(onCancel).toHaveBeenCalledTimes(1);
+  });
 });

@@ -1,29 +1,17 @@
-import { useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import AlertMessage from '../components/AlertMessage';
 import Loader from '../components/Loader';
 import ReviewCard from '../components/ReviewCard';
-import ReviewForm from '../components/ReviewForm';
+import ReviewPanel from '../components/ReviewPanel';
 import ReviewSummary from '../components/ReviewSummary';
+import useReviewActions from '../hooks/useReviewActions';
 import useReviews from '../hooks/useReviews';
-import { buildReviewPayload, EMPTY_REVIEW_FORM } from '../services/reviewMapper';
-import { createReview } from '../services/reviewService';
 
 export default function ReviewListPage() {
   const { adopterId } = useParams();
   const { reviews, loading, error, reload, setReviews } = useReviews(adopterId);
-  const location = useLocation();
-  const [message, setMessage] = useState(null);
-  const [formKey, setFormKey] = useState(0);
-  const successMessage = message ?? location.state?.message;
+  const actions = useReviewActions(adopterId, setReviews);
   const loaded = !loading && !error;
-
-  const handleCreate = async (values) => {
-    const created = await createReview(adopterId, buildReviewPayload(values));
-    setReviews((current) => [...current, created]);
-    setMessage('Reseña publicada correctamente.');
-    setFormKey((key) => key + 1);
-  };
 
   return (
     <section>
@@ -34,7 +22,8 @@ export default function ReviewListPage() {
         </div>
       </div>
 
-      {successMessage && <AlertMessage variant="success">{successMessage}</AlertMessage>}
+      {actions.message && <AlertMessage variant="success">{actions.message}</AlertMessage>}
+      {actions.actionError && <AlertMessage>{actions.actionError}</AlertMessage>}
 
       {loading && <Loader label="Cargando reseñas..." />}
 
@@ -57,24 +46,26 @@ export default function ReviewListPage() {
               <ul className="review-list" aria-label="Mis reseñas">
                 {reviews.map((review) => (
                   <li key={review.id}>
-                    <ReviewCard review={review} adopterId={adopterId} />
+                    <ReviewCard
+                      review={review}
+                      adopterId={adopterId}
+                      editing={actions.editing?.id === review.id}
+                      deleting={actions.deletingId === review.id}
+                      onEdit={() => actions.startEdit(review)}
+                      onDelete={() => actions.remove(review)}
+                    />
                   </li>
                 ))}
               </ul>
             )}
           </div>
 
-          <aside aria-labelledby="review-panel-title">
-            <h2 id="review-panel-title" className="review-panel__title">
-              Nueva reseña
-            </h2>
-            <ReviewForm
-              key={formKey}
-              initialValues={EMPTY_REVIEW_FORM}
-              submitLabel="Publicar reseña"
-              onSubmit={handleCreate}
-            />
-          </aside>
+          <ReviewPanel
+            editing={actions.editing}
+            formKey={actions.formKey}
+            onSubmit={actions.save}
+            onCancel={actions.cancelEdit}
+          />
         </div>
       )}
     </section>

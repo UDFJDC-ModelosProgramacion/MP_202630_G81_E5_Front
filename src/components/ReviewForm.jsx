@@ -1,17 +1,27 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import AlertMessage from './AlertMessage';
 import FormField from './FormField';
 import ReviewRatingInput from './ReviewRatingInput';
 import { getReviewErrorMessage } from '../utils/reviewMessages';
 import { validateReview } from '../utils/reviewValidation';
 
-export default function ReviewForm({ initialValues, submitLabel, onSubmit }) {
+export default function ReviewForm({
+  initialValues,
+  submitLabel,
+  focusOnMount,
+  onSubmit,
+  onCancel,
+}) {
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState(null);
   const [submitting, setSubmitting] = useState(false);
 
   const focusField = (name) => document.getElementById(name)?.focus();
+
+  useEffect(() => {
+    if (focusOnMount) document.getElementById('rating')?.focus();
+  }, [focusOnMount]);
 
   const handleChange = (name, value) => {
     setValues((prev) => ({ ...prev, [name]: value }));
@@ -66,6 +76,11 @@ export default function ReviewForm({ initialValues, submitLabel, onSubmit }) {
       </FormField>
 
       <div className="form-actions">
+        {onCancel && (
+          <button type="button" className="btn-outline-brand" onClick={onCancel}>
+            Cancelar
+          </button>
+        )}
         <button type="submit" className="btn-brand" disabled={submitting}>
           {submitting ? 'Guardando...' : submitLabel}
         </button>
