@@ -35,6 +35,11 @@ describe('PetTable', () => {
     expect(screen.getByRole('link', { name: 'Editar Luna' }).getAttribute('href')).toBe('/mascotas/1/editar');
   });
 
+  it('enlaza a las fotos de la mascota', () => {
+    renderTable();
+    expect(screen.getByRole('link', { name: 'Fotos de Luna' }).getAttribute('href')).toBe('/mascotas/1/fotos');
+  });
+
   it('solo muestra Eliminar cuando recibe onDelete', () => {
     renderTable();
     expect(screen.queryByRole('button', { name: /Eliminar/ })).toBeNull();

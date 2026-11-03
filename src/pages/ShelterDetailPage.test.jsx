@@ -33,6 +33,7 @@ describe('ShelterDetailPage', () => {
     expect(screen.getByText('Bogotá')).toBeTruthy();
     expect(screen.getByText('2')).toBeTruthy();
     expect(screen.getByRole('link', { name: 'Editar' }).getAttribute('href')).toBe('/refugios/1/editar');
+    expect(screen.getByRole('link', { name: 'Fotos' }).getAttribute('href')).toBe('/refugios/1/fotos');
   });
 
   it('muestra 0 eventos cuando el refugio no tiene', async () => {

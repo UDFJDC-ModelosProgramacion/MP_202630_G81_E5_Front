@@ -50,6 +50,11 @@ export default function ShelterDetailPage() {
           Volver al listado
         </Link>
         {shelter && (
+          <Link to={`/refugios/${shelter.id}/fotos`} className="btn-outline-brand">
+            Fotos
+          </Link>
+        )}
+        {shelter && (
           <Link to={`/refugios/${shelter.id}/editar`} className="btn-brand">
             Editar
           </Link>

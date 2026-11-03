@@ -287,3 +287,49 @@ select.form-control-brand {
 .shelter-table th:nth-child(3) { width: 13%; }
 .shelter-table th:nth-child(4) { width: 12%; }
 .shelter-table th:nth-child(5) { width: 27%; }
+
+.photo-tabs { display: flex; gap: 8px; margin-bottom: 20px; }
+.photo-tabs__tab {
+  padding: 12px 20px; border-radius: 12px;
+  font-size: 17px; font-weight: 500; color: #44524e; text-decoration: none;
+}
+.photo-tabs__tab--active { background: var(--color-primary-soft); color: var(--color-primary); font-weight: 700; }
+
+.photo-card {
+  background: #fff; border: 1px solid var(--color-border);
+  border-radius: 20px; padding: 28px; box-sizing: border-box;
+}
+.photo-card__title { margin: 0 0 24px; font-size: 24px; font-weight: 800; }
+
+.photo-grid {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px 22px;
+}
+.photo-grid__link { display: block; text-decoration: none; }
+.photo-grid__link:focus-visible { outline: 3px solid var(--color-primary); border-radius: 12px; }
+.photo-grid__actions { display: flex; gap: 16px; margin-top: 12px; }
+.photo-grid__action {
+  padding: 0; border: 0; background: none; cursor: pointer;
+  font: 700 16px 'Plus Jakarta Sans', sans-serif; color: var(--color-primary);
+}
+.photo-grid__action--danger { color: var(--color-error); }
+.photo-grid__action:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.photo-image, .photo-placeholder {
+  display: block; width: 100%; aspect-ratio: 209 / 170; border-radius: 12px; box-sizing: border-box;
+}
+.photo-image { object-fit: cover; background: var(--color-bg); }
+.photo-placeholder {
+  display: flex; align-items: center; justify-content: center;
+  color: var(--color-muted); font-size: 16px; font-weight: 600;
+  background: repeating-linear-gradient(135deg, #e6ebe9 0 14px, #edf1f0 14px 28px);
+}
+.photo-large { aspect-ratio: 16 / 9; }
+.photo-image.photo-large { object-fit: contain; }
+
+.photo-detail__list { margin-top: 24px; }
+.photo-detail__wide { grid-column: 1 / -1; word-break: break-all; }
+
+@media (max-width: 720px) {
+  .photo-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
