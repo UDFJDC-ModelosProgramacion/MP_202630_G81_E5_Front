@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  buildOwnerTargets,
   buildPhotoPayload,
   buildPhotoTargets,
   buildPhotoUpdatePayload,
@@ -70,5 +71,16 @@ describe('photoMapper', () => {
       url: 'https://x.co/a.jpg',
     });
     expect(photoToFormValues({ id: 3 }, 'pets:1').url).toBe('');
+  });
+
+  it('arma los destinos de la página de una mascota', () => {
+    const pet = { id: 1, name: 'Luna', species: 'Perro', shelter: { id: 2, name: 'Refugio Adopciones' } };
+    expect(buildOwnerTargets('pets', pet).map((target) => target.value)).toEqual(['pets:1', 'shelters:2']);
+  });
+
+  it('arma el único destino de la página de un refugio', () => {
+    expect(buildOwnerTargets('shelters', { id: 2, name: 'Huellitas' })).toEqual([
+      { value: 'shelters:2', label: 'Huellitas · Refugio' },
+    ]);
   });
 });

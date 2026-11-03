@@ -1,14 +1,15 @@
 import { Link, useParams } from 'react-router-dom';
 import AlertMessage from '../components/AlertMessage';
 import Loader from '../components/Loader';
-import PhotoGrid from '../components/PhotoGrid';
-import PhotoTabs from '../components/PhotoTabs';
+import PhotoWorkspace from '../components/PhotoWorkspace';
+import usePhotoActions from '../hooks/usePhotoActions';
 import usePhotoCollection from '../hooks/usePhotoCollection';
-import { PHOTO_OWNER_INFO, photosPath } from '../utils/photoOwners';
+import { PHOTO_OWNER_INFO } from '../utils/photoOwners';
 
-export default function PhotoListPage({ owner }) {
-  const { id } = useParams();
-  const { entity, photos, loading, error, notFound, reload } = usePhotoCollection(owner, id);
+function PhotoListContent({ owner, id }) {
+  const { entity, photos, loading, error, notFound, reload, addPhoto, replacePhoto } =
+    usePhotoCollection(owner, id);
+  const actions = usePhotoActions({ owner, entity, addPhoto, replacePhoto });
   const info = PHOTO_OWNER_INFO[owner];
 
   return (
@@ -27,6 +28,10 @@ export default function PhotoListPage({ owner }) {
         </div>
       </div>
 
+      {actions.feedback && (
+        <AlertMessage variant={actions.feedback.type}>{actions.feedback.message}</AlertMessage>
+      )}
+
       {loading && <Loader label="Cargando fotos..." />}
 
       {!loading && error && (
@@ -41,22 +46,22 @@ export default function PhotoListPage({ owner }) {
       )}
 
       {!loading && !error && entity && (
-        <>
-          <PhotoTabs owner={owner} entity={entity} />
-          <div className="photo-card">
-            <h2 className="photo-card__title">Fotos de {entity.name}</h2>
-            {photos.length === 0 ? (
-              <p className="empty-state">Aún no hay fotos de {entity.name}.</p>
-            ) : (
-              <PhotoGrid
-                photos={photos}
-                ownerName={entity.name}
-                basePath={photosPath(owner, id)}
-              />
-            )}
-          </div>
-        </>
+        <PhotoWorkspace
+          owner={owner}
+          entity={entity}
+          photos={photos}
+          editing={actions.editing}
+          formKey={actions.formKey}
+          onEdit={actions.startEdit}
+          onCancel={actions.cancelEdit}
+          onSubmit={actions.submitPhoto}
+        />
       )}
     </section>
   );
+}
+
+export default function PhotoListPage({ owner }) {
+  const { id } = useParams();
+  return <PhotoListContent key={`${owner}:${id}`} owner={owner} id={id} />;
 }

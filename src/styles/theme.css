@@ -333,3 +333,15 @@ select.form-control-brand {
 @media (max-width: 720px) {
   .photo-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+
+.photo-layout {
+  display: grid; grid-template-columns: minmax(0, 1fr) 380px;
+  gap: 28px; align-items: start;
+}
+.photo-form__title { margin: 0 0 20px; font-size: 24px; font-weight: 800; }
+.photo-form__actions { display: flex; flex-direction: column; gap: 12px; }
+.photo-form__actions .btn-brand,
+.photo-form__actions .btn-outline-brand { width: 100%; }
+@media (max-width: 960px) {
+  .photo-layout { grid-template-columns: 1fr; }
+}

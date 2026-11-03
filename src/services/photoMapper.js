@@ -46,3 +46,9 @@ export function buildPhotoUpdatePayload(form) {
 export function photoToFormValues(photo, target) {
   return { target, url: photo.url ?? '' };
 }
+
+export function buildOwnerTargets(owner, entity) {
+  return owner === PHOTO_OWNER.PET
+    ? buildPhotoTargets({ pet: entity, shelter: entity.shelter })
+    : buildPhotoTargets({ shelter: entity });
+}

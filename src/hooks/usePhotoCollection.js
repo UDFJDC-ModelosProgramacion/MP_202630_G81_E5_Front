@@ -40,7 +40,20 @@ export default function usePhotoCollection(owner, id) {
   }, [owner, id, requestKey]);
 
   const reload = useCallback(() => setReloadCount((count) => count + 1), []);
+  const addPhoto = useCallback(
+    (photo) => setState((prev) => ({ ...prev, photos: [...prev.photos, photo] })),
+    [],
+  );
+  const replacePhoto = useCallback(
+    (photo) =>
+      setState((prev) => ({
+        ...prev,
+        photos: prev.photos.map((item) => (item.id === photo.id ? photo : item)),
+      })),
+    [],
+  );
+  const actions = { reload, addPhoto, replacePhoto };
 
-  if (state.key !== requestKey) return { ...LOADING, reload };
-  return { ...state, loading: false, reload };
+  if (state.key !== requestKey) return { ...LOADING, ...actions };
+  return { ...state, loading: false, ...actions };
 }
