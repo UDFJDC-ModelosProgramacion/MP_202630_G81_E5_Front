@@ -10,6 +10,10 @@ import PetListPage from '../pages/PetListPage';
 import ReviewDetailPage from '../pages/ReviewDetailPage';
 import ReviewHomePage from '../pages/ReviewHomePage';
 import ReviewListPage from '../pages/ReviewListPage';
+import ShelterCreatePage from '../pages/ShelterCreatePage';
+import ShelterDetailPage from '../pages/ShelterDetailPage';
+import ShelterEditPage from '../pages/ShelterEditPage';
+import ShelterListPage from '../pages/ShelterListPage';
 
 export default function AppRoutes() {
   return (
@@ -26,6 +30,10 @@ export default function AppRoutes() {
         <Route path="/adoptantes/:adopterId/resenas" element={<ReviewListPage />} />
         <Route path="/adoptantes/:adopterId/resenas/:reviewId" element={<ReviewDetailPage />} />
         <Route path="/adopciones/:id" element={<AdoptionDetailPage />} />
+        <Route path="/refugios" element={<ShelterListPage />} />
+        <Route path="/refugios/nuevo" element={<ShelterCreatePage />} />
+        <Route path="/refugios/:id" element={<ShelterDetailPage />} />
+        <Route path="/refugios/:id/editar" element={<ShelterEditPage />} />
       </Route>
     </Routes>
   );
