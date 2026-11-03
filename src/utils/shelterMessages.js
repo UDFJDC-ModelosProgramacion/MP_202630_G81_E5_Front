@@ -1,7 +1,7 @@
 import { getErrorMessage, isNotFound } from '../services/apiError';
 
 export const DUPLICATE_SHELTER_MESSAGE =
-  'Ya existe un refugio con ese nombre en esa ciudad.';
+  'Ya existe un refugio con este nombre en esta ciudad.';
 
 export function getSaveErrorMessage(error) {
   if (error?.response?.status === 412) {

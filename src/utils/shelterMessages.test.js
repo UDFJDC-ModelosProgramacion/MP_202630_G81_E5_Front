@@ -46,6 +46,6 @@ describe('getSaveErrorMessage', () => {
 
 describe('DUPLICATE_SHELTER_MESSAGE', () => {
   it('tiene el texto del aviso de duplicado', () => {
-    expect(DUPLICATE_SHELTER_MESSAGE).toBe('Ya existe un refugio con ese nombre en esa ciudad.');
+    expect(DUPLICATE_SHELTER_MESSAGE).toBe('Ya existe un refugio con este nombre en esta ciudad.');
   });
 });
