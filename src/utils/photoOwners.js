@@ -1,0 +1,1 @@
+export const PHOTO_OWNER = { PET: 'pets', SHELTER: 'shelters' };
