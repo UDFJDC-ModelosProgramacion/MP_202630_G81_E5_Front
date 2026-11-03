@@ -1,4 +1,4 @@
-import { PHOTO_OWNER } from '../utils/photoOwners';
+import { describePhotoOwner, PHOTO_OWNER } from '../utils/photoOwners';
 
 export const EMPTY_PHOTO_FORM = { target: '', url: '' };
 
@@ -18,13 +18,13 @@ export function buildPhotoTargets({ pet = null, shelter = null } = {}) {
   if (pet) {
     targets.push({
       value: toTargetValue(PHOTO_OWNER.PET, pet.id),
-      label: `${pet.name} · ${pet.species}`,
+      label: describePhotoOwner(PHOTO_OWNER.PET, pet),
     });
   }
   if (shelter) {
     targets.push({
       value: toTargetValue(PHOTO_OWNER.SHELTER, shelter.id),
-      label: `${shelter.name} · Refugio`,
+      label: describePhotoOwner(PHOTO_OWNER.SHELTER, shelter),
     });
   }
   return targets;
