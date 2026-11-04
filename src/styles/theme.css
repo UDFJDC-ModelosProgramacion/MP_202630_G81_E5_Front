@@ -230,3 +230,118 @@ select.form-control-brand {
   .adoption-status-form { flex-direction: column; align-items: stretch; }
   .adoption-status-form .form-field { margin-bottom: 8px; }
 }
+
+/* ---- Reseñas (Calificar el proceso de adopción) ---- */
+.review-stars { display: inline-flex; gap: 2px; font-size: 22px; line-height: 1; }
+.review-stars__star { color: #c9d3d0; }
+.review-stars__star--filled { color: #e0a100; }
+
+.review-summary {
+  display: flex; align-items: center; gap: 24px; margin-bottom: 24px;
+  padding: 24px 28px; background: #fff; border: 1px solid var(--color-border); border-radius: 16px;
+}
+.review-summary__average { margin: 0; font-size: 56px; font-weight: 800; color: var(--color-primary); line-height: 1; }
+.review-summary__count { margin: 8px 0 0; font-size: 16px; color: var(--color-muted); }
+
+.review-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; }
+.review-card { padding: 22px 28px; background: #fff; border: 1px solid var(--color-border); border-radius: 16px; }
+.review-card__header { display: flex; align-items: center; gap: 12px; }
+.review-card__rating { font-size: 16px; font-weight: 700; color: var(--color-muted); }
+.review-card__comment { margin: 12px 0 0; font-size: 18px; }
+.review-card__comment--empty { color: var(--color-muted); font-style: italic; }
+.review-card__actions { display: flex; align-items: center; gap: 14px; margin-top: 16px; }
+.review-card__button {
+  padding: 0; border: 0; background: none; cursor: pointer;
+  font: 700 16px 'Plus Jakarta Sans', sans-serif; color: var(--color-primary); text-decoration: none;
+}
+.review-card__button:hover { text-decoration: underline; }
+.review-card__button--danger { color: var(--color-error); }
+.review-card__button:disabled { opacity: 0.6; cursor: not-allowed; text-decoration: none; }
+.review-card--editing { border: 2px solid var(--color-primary); padding: 21px 27px; }
+
+.review-detail__rating { display: flex; align-items: center; gap: 10px; }
+.review-detail__wide { grid-column: 1 / -1; }
+@media (max-width: 720px) {
+  .review-summary { flex-direction: column; align-items: flex-start; gap: 12px; }
+}
+
+.review-layout { display: grid; grid-template-columns: minmax(0, 1fr) 400px; gap: 32px; align-items: start; }
+.review-panel__title { margin: 0 0 16px; font-size: 24px; font-weight: 800; }
+.review-rating { margin: 0 0 26px; padding: 0; border: 0; min-width: 0; }
+.review-rating legend { float: none; padding: 0; }
+.review-rating__options { display: flex; gap: 6px; }
+.review-rating__option { position: relative; cursor: pointer; line-height: 1; }
+.review-rating__star { font-size: 40px; color: #c9d3d0; transition: color 0.15s; }
+.review-rating__star--filled { color: #e0a100; }
+.review-rating__input:focus-visible + .review-rating__star { outline: 3px solid var(--color-primary); border-radius: 6px; }
+.review-rating__hint { margin: 10px 0 0; font-size: 15px; color: var(--color-muted); }
+.review-form__comment { min-height: 120px; padding: 12px 18px; resize: vertical; }
+.review-form__comment.form-control-brand--invalid { padding: 11px 17px; }
+@media (max-width: 960px) {
+  .review-layout { grid-template-columns: 1fr; }
+}
+
+.shelter-table { min-width: 760px; }
+.shelter-table th:nth-child(1) { width: 30%; }
+.shelter-table th:nth-child(2) { width: 18%; }
+.shelter-table th:nth-child(3) { width: 13%; }
+.shelter-table th:nth-child(4) { width: 12%; }
+.shelter-table th:nth-child(5) { width: 27%; }
+
+.photo-tabs { display: flex; gap: 8px; margin-bottom: 20px; }
+.photo-tabs__tab {
+  padding: 12px 20px; border-radius: 12px;
+  font-size: 17px; font-weight: 500; color: #44524e; text-decoration: none;
+}
+.photo-tabs__tab--active { background: var(--color-primary-soft); color: var(--color-primary); font-weight: 700; }
+
+.photo-card {
+  background: #fff; border: 1px solid var(--color-border);
+  border-radius: 20px; padding: 28px; box-sizing: border-box;
+}
+.photo-card__title { margin: 0 0 24px; font-size: 24px; font-weight: 800; }
+
+.photo-grid {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px 22px;
+}
+.photo-grid__link { display: block; text-decoration: none; }
+.photo-grid__link:focus-visible { outline: 3px solid var(--color-primary); border-radius: 12px; }
+.photo-grid__actions { display: flex; gap: 16px; margin-top: 12px; }
+.photo-grid__action {
+  padding: 0; border: 0; background: none; cursor: pointer;
+  font: 700 16px 'Plus Jakarta Sans', sans-serif; color: var(--color-primary);
+}
+.photo-grid__action--danger { color: var(--color-error); }
+.photo-grid__action:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.photo-image, .photo-placeholder {
+  display: block; width: 100%; aspect-ratio: 209 / 170; border-radius: 12px; box-sizing: border-box;
+}
+.photo-image { object-fit: cover; background: var(--color-bg); }
+.photo-placeholder {
+  display: flex; align-items: center; justify-content: center;
+  color: var(--color-muted); font-size: 16px; font-weight: 600;
+  background: repeating-linear-gradient(135deg, #e6ebe9 0 14px, #edf1f0 14px 28px);
+}
+.photo-large { aspect-ratio: 16 / 9; }
+.photo-image.photo-large { object-fit: contain; }
+
+.photo-detail__list { margin-top: 24px; }
+.photo-detail__wide { grid-column: 1 / -1; word-break: break-all; }
+
+@media (max-width: 720px) {
+  .photo-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+.photo-layout {
+  display: grid; grid-template-columns: minmax(0, 1fr) 380px;
+  gap: 28px; align-items: start;
+}
+.photo-form__title { margin: 0 0 20px; font-size: 24px; font-weight: 800; }
+.photo-form__actions { display: flex; flex-direction: column; gap: 12px; }
+.photo-form__actions .btn-brand,
+.photo-form__actions .btn-outline-brand { width: 100%; }
+@media (max-width: 960px) {
+  .photo-layout { grid-template-columns: 1fr; }
+}

@@ -34,15 +34,13 @@ export default function PetTable({ pets, onDelete, deletingId = null }) {
                     <StatusBadge available={pet.available} />
                   </td>
                   <td>
-                    <a
-                      href="#"
+                    <Link
+                      to={`/mascotas/${pet.id}/fotos`}
                       className="pet-table__action"
                       aria-label={`Fotos de ${pet.name}`}
-                      aria-disabled="true"
-                      onClick={(event) => event.preventDefault()}
                     >
                       Fotos
-                    </a>
+                    </Link>
                     <Link
                       to={`/mascotas/${pet.id}/editar`}
                       className="pet-table__action"

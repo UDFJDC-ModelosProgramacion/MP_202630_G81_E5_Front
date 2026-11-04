@@ -29,6 +29,7 @@ describe('PetDetailPage', () => {
     expect(await screen.findByRole('heading', { name: 'Luna' })).toBeTruthy();
     expect(screen.getByText('Labrador')).toBeTruthy();
     expect(screen.getByText('Refugio Adopciones')).toBeTruthy();
+    expect(screen.getByRole('link', { name: 'Fotos' }).getAttribute('href')).toBe('/mascotas/1/fotos');
     expect(getPet).toHaveBeenCalledWith('1');
   });
 
