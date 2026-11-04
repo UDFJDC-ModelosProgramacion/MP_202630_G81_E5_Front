@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { getPhotoErrorMessage } from './photoMessages';
+import { getPhotoDeleteErrorMessage, getPhotoErrorMessage } from './photoMessages';
 
 const apiError = (status, message) => ({ response: { status, data: { apierror: { message } } } });
 
@@ -56,5 +56,19 @@ describe('getPhotoErrorMessage', () => {
 
   it('informa el error de conexión', () => {
     expect(getPhotoErrorMessage({ request: {} }, 'pets')).toMatch(/conectar con el servidor/);
+  });
+  it('explica por qué no se puede eliminar una foto de otro destino', () => {
+    expect(
+      getPhotoDeleteErrorMessage(apiError(412, 'The photo is not associated to the pet'), 'pets', 'Foto 1'),
+    ).toBe('No se puede eliminar Foto 1: La foto no pertenece a esta mascota.');
+  });
+
+  it('al eliminar usa el mensaje normal en los demás errores', () => {
+    expect(
+      getPhotoDeleteErrorMessage(apiError(404, 'The photo with the given id was not found'), 'pets', 'Foto 1'),
+    ).toBe('Foto no encontrada.');
+    expect(getPhotoDeleteErrorMessage({ request: {} }, 'pets', 'Foto 1')).toMatch(
+      /conectar con el servidor/,
+    );
   });
 });

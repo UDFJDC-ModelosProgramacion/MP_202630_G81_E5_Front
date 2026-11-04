@@ -7,9 +7,9 @@ import usePhotoCollection from '../hooks/usePhotoCollection';
 import { PHOTO_OWNER_INFO } from '../utils/photoOwners';
 
 function PhotoListContent({ owner, id }) {
-  const { entity, photos, loading, error, notFound, reload, addPhoto, replacePhoto } =
+  const { entity, photos, loading, error, notFound, reload, addPhoto, replacePhoto, removePhoto } =
     usePhotoCollection(owner, id);
-  const actions = usePhotoActions({ owner, entity, addPhoto, replacePhoto });
+  const actions = usePhotoActions({ owner, entity, addPhoto, replacePhoto, removePhoto });
   const info = PHOTO_OWNER_INFO[owner];
 
   return (
@@ -53,6 +53,8 @@ function PhotoListContent({ owner, id }) {
           editing={actions.editing}
           formKey={actions.formKey}
           onEdit={actions.startEdit}
+          onDelete={actions.handleDelete}
+          deletingId={actions.deletingId}
           onCancel={actions.cancelEdit}
           onSubmit={actions.submitPhoto}
         />

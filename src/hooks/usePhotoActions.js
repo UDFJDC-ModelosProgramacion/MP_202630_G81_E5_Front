@@ -7,11 +7,12 @@ import {
 } from '../services/photoMapper';
 import { createPhoto, updatePhoto } from '../services/photoService';
 import { photosPath } from '../utils/photoOwners';
+import usePhotoDelete from './usePhotoDelete';
 
 const ADDED_MESSAGE = 'Foto agregada correctamente.';
 const SAVED_MESSAGE = 'Cambios guardados correctamente.';
 
-export default function usePhotoActions({ owner, entity, addPhoto, replacePhoto }) {
+export default function usePhotoActions({ owner, entity, addPhoto, replacePhoto, removePhoto }) {
   const navigate = useNavigate();
   const location = useLocation();
   const [editing, setEditing] = useState(null);
@@ -19,6 +20,14 @@ export default function usePhotoActions({ owner, entity, addPhoto, replacePhoto 
   const [feedback, setFeedback] = useState(() =>
     location.state?.message ? { type: 'success', message: location.state.message } : null,
   );
+
+  const { deletingId, handleDelete } = usePhotoDelete({
+    owner,
+    entity,
+    removePhoto,
+    onFeedback: setFeedback,
+    onRemoved: (photo) => setEditing((current) => (current?.id === photo.id ? null : current)),
+  });
 
   const finish = (message) => {
     setFeedback({ type: 'success', message });
@@ -52,7 +61,9 @@ export default function usePhotoActions({ owner, entity, addPhoto, replacePhoto 
     editing,
     formKey,
     feedback,
+    deletingId,
     startEdit,
+    handleDelete,
     cancelEdit: () => setEditing(null),
     submitPhoto: (values) => (editing ? edit(values) : create(values)),
   };

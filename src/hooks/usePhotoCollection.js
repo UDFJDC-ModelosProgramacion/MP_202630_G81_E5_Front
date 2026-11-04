@@ -52,7 +52,12 @@ export default function usePhotoCollection(owner, id) {
       })),
     [],
   );
-  const actions = { reload, addPhoto, replacePhoto };
+  const removePhoto = useCallback(
+    (photoId) =>
+      setState((prev) => ({ ...prev, photos: prev.photos.filter((item) => item.id !== photoId) })),
+    [],
+  );
+  const actions = { reload, addPhoto, replacePhoto, removePhoto };
 
   if (state.key !== requestKey) return { ...LOADING, ...actions };
   return { ...state, loading: false, ...actions };

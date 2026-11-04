@@ -24,3 +24,11 @@ export function getPhotoErrorMessage(error, owner) {
   const message = getErrorMessage(error);
   return SERVER_MESSAGES[message] ?? message;
 }
+
+export function getPhotoDeleteErrorMessage(error, owner, label) {
+  const message = getPhotoErrorMessage(error, owner);
+  if (error?.response?.status === 412) {
+    return `No se puede eliminar ${label}: ${message}`;
+  }
+  return message;
+}

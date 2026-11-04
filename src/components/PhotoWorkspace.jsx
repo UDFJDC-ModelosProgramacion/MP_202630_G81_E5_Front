@@ -16,6 +16,8 @@ export default function PhotoWorkspace({
   editing,
   formKey,
   onEdit,
+  onDelete,
+  deletingId,
   onCancel,
   onSubmit,
 }) {
@@ -38,6 +40,8 @@ export default function PhotoWorkspace({
               ownerName={entity.name}
               basePath={photosPath(owner, entity.id)}
               onEdit={onEdit}
+              onDelete={onDelete}
+              deletingId={deletingId}
             />
           )}
         </div>
