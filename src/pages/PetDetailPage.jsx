@@ -58,6 +58,11 @@ export default function PetDetailPage() {
           Volver al listado
         </Link>
         {pet && (
+          <Link to={`/mascotas/${pet.id}/fotos`} className="btn-outline-brand">
+            Fotos
+          </Link>
+        )}
+        {pet && (
           <Link to={`/mascotas/${pet.id}/editar`} className="btn-brand">
             Editar
           </Link>
