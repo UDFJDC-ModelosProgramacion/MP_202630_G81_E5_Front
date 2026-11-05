@@ -6,7 +6,7 @@ const navItems = [
   { label: 'Adoptantes' },
   { label: 'Adopciones', to: '/adopciones' },
   { label: 'Mis reseñas', to: '/mis-resenas', alsoActive: /^\/adoptantes\/[^/]+\/resenas/ },
-  { label: 'Refugios' },
+  { label: 'Refugios', to: '/refugios' },
 ];
 
 export default function Header() {
@@ -27,7 +27,7 @@ export default function Header() {
         <span className="app-brand__name">AdoptaYa</span>
       </div>
 
-            <nav className="app-nav" aria-label="Principal">
+      <nav className="app-nav" aria-label="Principal">
         {navItems.map(({ label, to, alsoActive }) =>
           to ? (
             <NavLink

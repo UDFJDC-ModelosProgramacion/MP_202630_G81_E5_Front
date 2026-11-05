@@ -16,4 +16,16 @@ describe('Header', () => {
     expect(screen.getByText('AdoptaYa')).toBeTruthy();
     expect(screen.getByRole('link', { name: 'Mascotas' }).className).toContain('app-nav__link--active');
   });
+
+  it('habilita el enlace Refugios y lo resalta en /refugios', () => {
+    render(
+      <MemoryRouter initialEntries={['/refugios']}>
+        <Header />
+      </MemoryRouter>,
+    );
+    const link = screen.getByRole('link', { name: 'Refugios' });
+    expect(link.getAttribute('href')).toBe('/refugios');
+    expect(link.className).toContain('app-nav__link--active');
+  });
 });
+
