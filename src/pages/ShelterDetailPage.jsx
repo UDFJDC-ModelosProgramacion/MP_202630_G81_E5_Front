@@ -55,6 +55,11 @@ export default function ShelterDetailPage() {
           </Link>
         )}
         {shelter && (
+          <Link to={`/refugios/${shelter.id}/eventos`} className="btn-outline-brand">
+            Eventos
+          </Link>
+        )}
+        {shelter && (
           <Link to={`/refugios/${shelter.id}/editar`} className="btn-brand">
             Editar
           </Link>
