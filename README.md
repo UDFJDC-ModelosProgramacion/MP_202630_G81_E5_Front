@@ -67,6 +67,32 @@ Como administrador de refugio quiero registrar una mascota con nombre, especie y
 | 5. Consultar mascotas | `/mascotas` (listado) y clic en el nombre → `/mascotas/:id`; si no existe, "Mascota no encontrada." |
 | 6. Editar mascota | Botón "Editar" → `/mascotas/:id/editar`; conserva el refugio; datos inválidos se rechazan |
 | 7. Borrar mascota | Botón "Eliminar"; con adopciones o fotos asociadas se muestra el error; si no existe, "Mascota no encontrada." |
+ | 7. Eliminar reseña | "Eliminar" (con confirmación); la reseña desaparece de la lista |
+
+### HU02 — Gestionar fotos
+
+Como administrador de refugio quiero asociar fotos a una mascota o a un refugio para mostrar su aspecto a los adoptantes.
+
+**Cómo visualizarla**
+
+1. Levanta el back-end y carga datos de prueba (la base se borra al reiniciar el back). Primero las mascotas y el refugio, luego las fotos:
+   ```powershell
+   .\infra\seed-data.ps1
+   .\infra\seed-fotos.ps1
+   ```
+   `seed-fotos.ps1` requiere las mascotas Luna y Michi y el refugio "Refugio Adopciones" (los crea `seed-data.ps1`). Crea 3 fotos para Luna, 1 para Michi y 2 para el refugio, e imprime sus ids; si el destino ya tiene fotos, lo omite. Si PowerShell bloquea el script: `powershell -ExecutionPolicy Bypass -File .\infra\seed-fotos.ps1`.
+2. Ejecuta `npm run dev`, abre `http://localhost:5173/mascotas` y pulsa "Fotos" en la fila de Luna. También se llega desde el detalle de una mascota y desde el detalle de un refugio.
+
+| Criterio de aceptación | Dónde verlo |
+| --- | --- |
+| 1. Crear foto válida | En `/mascotas/:id/fotos`, panel "Agregar foto": escribir una URL → "Agregar foto"; aparece en la lista de la mascota. Elegir el refugio en "Asociar a" abre `/refugios/:id/fotos` con la foto |
+| 2. Foto sin destino | En "Asociar a" elegir "Selecciona un destino" y enviar → "La foto debe asociarse a una mascota o a un refugio." |
+| 3. URL inválida | Dejar vacía la URL al agregar o al editar → "La URL es obligatoria."; si el back la rechaza, se muestra su mensaje |
+| 4. Mascota o refugio inexistente | `/mascotas/9999/fotos` → "Mascota no encontrada."; `/refugios/9999/fotos` → "Refugio no encontrado." |
+| 5. Consultar fotos | `/mascotas/:id/fotos` (o `/refugios/:id/fotos`) y clic en una foto → `/mascotas/:id/fotos/:photoId`; si no existe, "Foto no encontrada." |
+| 6. Foto de otro destino | El script imprime los ids; abrir `/mascotas/<id de Luna>/fotos/<id de una foto del refugio>` → "La foto no pertenece a esta mascota." (y lo equivalente en `/refugios/...`); lo mismo ocurre al editarla o eliminarla |
+| 7. Editar foto | "Editar" bajo una foto → el panel pasa a "Editar foto" con el destino bloqueado → "Guardar cambios"; la foto conserva su asociación y una URL vacía se rechaza |
+| 8. Borrar foto | "Eliminar" (con confirmación); la foto desaparece de la lista; si ya no existe, "Foto no encontrada." |
 
 ### HU05 — Registrar adopción
 
