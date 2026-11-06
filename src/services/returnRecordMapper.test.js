@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { buildEmptyReturnForm, buildReturnPayload, returnToFormValues } from './returnRecordMapper';
+import {
+  buildEmptyReturnForm,
+  buildReturnPayload,
+  buildSavedReturnRecord,
+  returnToFormValues,
+} from './returnRecordMapper';
 
 describe('buildEmptyReturnForm', () => {
   it('empieza con la fecha de hoy y sin motivo', () => {
@@ -30,5 +35,27 @@ describe('returnToFormValues', () => {
   it('usa valores vacíos si faltan datos', () => {
     expect(returnToFormValues({ date: null, reason: null })).toEqual({ date: '', reason: '' });
     expect(returnToFormValues(undefined)).toEqual({ date: '', reason: '' });
+  });
+});
+
+describe('buildSavedReturnRecord', () => {
+  it('conserva el día elegido aunque el back devuelva la hora enviada', () => {
+    const saved = buildSavedReturnRecord(
+      { date: '2026-10-05', reason: '  Se mudó  ' },
+      { id: 9, date: '2026-10-05T12:00:00.000+00:00', reason: 'Se mudó' },
+    );
+    expect(saved).toEqual({ id: 9, date: '2026-10-05T00:00:00.000Z', reason: 'Se mudó' });
+    expect(returnToFormValues(saved).date).toBe('2026-10-05');
+  });
+
+  it('funciona cuando el back no devuelve nada', () => {
+    expect(buildSavedReturnRecord({ date: '2026-10-05', reason: 'Alergia' }, undefined)).toEqual({
+      date: '2026-10-05T00:00:00.000Z',
+      reason: 'Alergia',
+    });
+  });
+
+  it('usa un motivo vacío si falta', () => {
+    expect(buildSavedReturnRecord({ date: '2026-10-05' }, {}).reason).toBe('');
   });
 });

@@ -18,3 +18,13 @@ export function buildReturnPayload(form) {
     reason: String(form.reason ?? '').trim(),
   };
 }
+
+// El back devuelve la hora enviada (12:00 UTC) y el formato de fechas suma 12 horas al mostrarla:
+// para no correr el día, la devolución guardada se muestra con el día elegido a medianoche.
+export function buildSavedReturnRecord(form, saved) {
+  return {
+    ...saved,
+    date: `${form.date}T00:00:00.000Z`,
+    reason: String(form.reason ?? '').trim(),
+  };
+}

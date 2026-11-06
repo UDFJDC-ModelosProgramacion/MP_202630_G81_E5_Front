@@ -4,15 +4,19 @@ import AlertMessage from '../components/AlertMessage';
 import Loader from '../components/Loader';
 import ReturnAdoptionSummary from '../components/ReturnAdoptionSummary';
 import ReturnRecordDetails from '../components/ReturnRecordDetails';
+import ReturnRegisterPanel from '../components/ReturnRegisterPanel';
 import useAdoption from '../hooks/useAdoption';
 import useReturnRecord from '../hooks/useReturnRecord';
+import useReturnRecordActions from '../hooks/useReturnRecordActions';
 import { ADOPTION_NOT_FOUND_MESSAGE, getAdoptionPetName } from '../utils/adoptionMessages';
 
 export default function ReturnRecordPage() {
   const { id } = useParams();
   const adoptionState = useAdoption(id);
   const recordState = useReturnRecord(id);
-  const { adoption } = adoptionState;
+  const { adoption, setAdoption } = adoptionState;
+  const { returnRecord, setReturnRecord } = recordState;
+  const actions = useReturnRecordActions({ adoption, setAdoption, setReturnRecord });
   const loading = adoptionState.loading || recordState.loading;
   const ready = !loading && adoption;
   const petName = adoption ? getAdoptionPetName(adoption) : '';
@@ -33,6 +37,8 @@ export default function ReturnRecordPage() {
       )}
 
       {ready && recordState.error && <AlertMessage>{recordState.error}</AlertMessage>}
+      {ready && actions.message && <AlertMessage variant="success">{actions.message}</AlertMessage>}
+      {ready && actions.actionError && <AlertMessage>{actions.actionError}</AlertMessage>}
 
       {ready && (
         <>
@@ -41,8 +47,11 @@ export default function ReturnRecordPage() {
             <AdoptionStatusBadge status={adoption.status} />
           </div>
           <div className="return-layout">
-            <ReturnAdoptionSummary adoption={adoption} hasReturnRecord={Boolean(recordState.returnRecord)} />
-            {recordState.returnRecord && <ReturnRecordDetails returnRecord={recordState.returnRecord} />}
+            <ReturnAdoptionSummary adoption={adoption} hasReturnRecord={Boolean(returnRecord)} />
+            {returnRecord && <ReturnRecordDetails returnRecord={returnRecord} />}
+            {!returnRecord && !recordState.error && (
+              <ReturnRegisterPanel adoptionId={adoption.id} onSubmit={actions.register} />
+            )}
           </div>
         </>
       )}

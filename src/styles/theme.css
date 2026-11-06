@@ -365,3 +365,7 @@ select.form-control-brand {
   .return-layout { grid-template-columns: 1fr; }
   .return-summary__list { grid-template-columns: 1fr; }
 }
+.return-form__reason { min-height: 150px; padding: 14px 18px; resize: vertical; }
+.return-form__reason.form-control-brand--invalid { padding: 13px 17px; }
+.return-form__hint { margin: 0 0 24px; font-size: 17px; color: var(--color-muted); }
+.return-form__actions { display: flex; justify-content: flex-end; gap: 14px; }

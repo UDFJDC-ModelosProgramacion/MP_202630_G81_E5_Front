@@ -14,7 +14,9 @@ export default function useReturnRecord(adoptionId) {
       })
       .catch((error) => {
         if (!active) return;
-        const failureMessage = isReturnRecordNotFound(error) ? null : getReturnRecordErrorMessage(error);
+        const failureMessage = isReturnRecordNotFound(error)
+          ? null
+          : getReturnRecordErrorMessage(error);
         setState({ returnRecord: null, loading: false, error: failureMessage });
       });
     return () => {
@@ -22,5 +24,9 @@ export default function useReturnRecord(adoptionId) {
     };
   }, [adoptionId]);
 
-  return state;
+  const setReturnRecord = (returnRecord) => {
+    setState((prev) => ({ ...prev, returnRecord }));
+  };
+
+  return { ...state, setReturnRecord };
 }

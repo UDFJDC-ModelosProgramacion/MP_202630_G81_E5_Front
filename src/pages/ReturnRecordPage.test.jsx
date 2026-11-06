@@ -7,7 +7,10 @@ import { getReturnRecord } from '../services/returnRecordService';
 import ReturnRecordPage from './ReturnRecordPage';
 
 vi.mock('../services/adoptionService', () => ({ getAdoption: vi.fn() }));
-vi.mock('../services/returnRecordService', () => ({ getReturnRecord: vi.fn() }));
+vi.mock('../services/returnRecordService', () => ({
+  getReturnRecord: vi.fn(),
+  createReturnRecord: vi.fn(),
+}));
 
 const adoption = {
   id: 1,
