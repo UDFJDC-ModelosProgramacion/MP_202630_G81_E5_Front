@@ -10,6 +10,8 @@ vi.mock('../services/adoptionService', () => ({ getAdoption: vi.fn() }));
 vi.mock('../services/returnRecordService', () => ({
   getReturnRecord: vi.fn(),
   createReturnRecord: vi.fn(),
+  updateReturnRecord: vi.fn(),
+  deleteReturnRecord: vi.fn(),
 }));
 
 const adoption = {

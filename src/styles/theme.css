@@ -369,3 +369,9 @@ select.form-control-brand {
 .return-form__reason.form-control-brand--invalid { padding: 13px 17px; }
 .return-form__hint { margin: 0 0 24px; font-size: 17px; color: var(--color-muted); }
 .return-form__actions { display: flex; justify-content: flex-end; gap: 14px; }
+.return-record__actions {
+  display: flex; flex-wrap: wrap; gap: 14px; margin-top: 28px;
+  padding-top: 24px; border-top: 1px solid var(--color-border);
+}
+.return-btn-danger { color: var(--color-error); border-color: var(--color-error); }
+.return-record__actions button:disabled { opacity: 0.6; cursor: not-allowed; }

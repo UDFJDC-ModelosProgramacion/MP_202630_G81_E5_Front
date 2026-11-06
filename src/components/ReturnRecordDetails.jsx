@@ -1,7 +1,7 @@
 import { formatAdoptionDate } from '../utils/adoptionFormatters';
 import { displayValue } from '../utils/formatters';
 
-export default function ReturnRecordDetails({ returnRecord }) {
+export default function ReturnRecordDetails({ returnRecord, deleting, onEdit, onDelete }) {
   return (
     <section className="detail-card" aria-labelledby="return-record-title">
       <h2 id="return-record-title" className="return-card__title">
@@ -17,6 +17,19 @@ export default function ReturnRecordDetails({ returnRecord }) {
           <dd className="return-record__reason">{displayValue(returnRecord.reason)}</dd>
         </div>
       </dl>
+      <div className="return-record__actions">
+        <button type="button" className="btn-outline-brand" disabled={deleting} onClick={onEdit}>
+          Editar devolución
+        </button>
+        <button
+          type="button"
+          className="btn-outline-brand return-btn-danger"
+          disabled={deleting}
+          onClick={onDelete}
+        >
+          {deleting ? 'Eliminando...' : 'Eliminar devolución'}
+        </button>
+      </div>
     </section>
   );
 }

@@ -3,8 +3,7 @@ import AdoptionStatusBadge from '../components/AdoptionStatusBadge';
 import AlertMessage from '../components/AlertMessage';
 import Loader from '../components/Loader';
 import ReturnAdoptionSummary from '../components/ReturnAdoptionSummary';
-import ReturnRecordDetails from '../components/ReturnRecordDetails';
-import ReturnRegisterPanel from '../components/ReturnRegisterPanel';
+import ReturnRecordPanel from '../components/ReturnRecordPanel';
 import useAdoption from '../hooks/useAdoption';
 import useReturnRecord from '../hooks/useReturnRecord';
 import useReturnRecordActions from '../hooks/useReturnRecordActions';
@@ -48,9 +47,12 @@ export default function ReturnRecordPage() {
           </div>
           <div className="return-layout">
             <ReturnAdoptionSummary adoption={adoption} hasReturnRecord={Boolean(returnRecord)} />
-            {returnRecord && <ReturnRecordDetails returnRecord={returnRecord} />}
-            {!returnRecord && !recordState.error && (
-              <ReturnRegisterPanel adoptionId={adoption.id} onSubmit={actions.register} />
+            {!recordState.error && (
+              <ReturnRecordPanel
+                adoptionId={adoption.id}
+                returnRecord={returnRecord}
+                actions={actions}
+              />
             )}
           </div>
         </>
