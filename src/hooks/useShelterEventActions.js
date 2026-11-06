@@ -40,7 +40,7 @@ export default function useShelterEventActions(shelterId, setEvents) {
 
   const create = async (values) => {
     const created = await createShelterEvent(shelterId, buildEventPayload(values));
-    setEvents((list) => [...list, created]);
+    setEvents((list) => [...list, { ...created, date: values.date }]);
     finishSave('Evento programado correctamente.');
   };
 
@@ -48,7 +48,9 @@ export default function useShelterEventActions(shelterId, setEvents) {
     const payload = buildEventPayload(values);
     await updateShelterEvent(shelterId, editing.id, payload);
     setEvents((list) =>
-      list.map((event) => (event.id === editing.id ? { ...event, ...payload } : event)),
+      list.map((event) =>
+        event.id === editing.id ? { ...event, ...payload, date: values.date } : event,
+      ),
     );
     finishSave('Evento actualizado correctamente.');
   };
