@@ -143,6 +143,51 @@ Como adoptante quiero calificar el proceso de adopción con una calificación de
 | 6. Editar reseña | "Editar" en una tarjeta → el panel pasa a "Editar reseña" → "Guardar cambios"; una calificación inválida se rechaza |
 | 7. Eliminar reseña | "Eliminar" (con confirmación); la reseña desaparece de la lista |
 
+### HU10 — Gestionar refugios
+
+Como administrador quiero registrar y gestionar refugios con nombre y ciudad para mantener actualizado el listado de refugios aliados.
+
+**Cómo visualizarla**
+
+1. Levanta el back-end y carga datos de prueba (la base se borra al reiniciar el back; el script se ejecuta una sola vez por arranque):
+   ```powershell
+   .\infra\seed-data.ps1
+   ```
+   Crea "Refugio Adopciones" en Bogotá con 4 mascotas. Si PowerShell bloquea el script: `powershell -ExecutionPolicy Bypass -File .\infra\seed-data.ps1`. Si la ciudad se ve como "BogotÃ¡" (problema de codificación del script en Windows PowerShell), corrígela con "Editar" escribiendo `Bogotá`.
+2. Ejecuta `npm run dev` y abre `http://localhost:5173/refugios`.
+
+| Criterio de aceptación | Dónde verlo |
+| --- | --- |
+| 1. Registrar refugio válido | `/refugios/nuevo` → nombre y ciudad → "Registrar refugio"; aviso verde y aparece en el listado |
+| 2. Nombre o ciudad vacíos | Enviar el formulario vacío → "El nombre es obligatorio." y "La ciudad es obligatoria." |
+| 3. Refugio repetido | Registrar el mismo nombre en la misma ciudad (por ejemplo "Refugio Adopciones" en "Bogotá") → "Ya existe un refugio con este nombre en esta ciudad."; el mismo nombre en otra ciudad sí se crea |
+| 4. Consultar refugios | `/refugios` (listado con mascotas y eventos) y "Ver detalle" → `/refugios/:id`; si no existe (`/refugios/9999`), "Refugio no encontrado." |
+| 5. Editar refugio | "Editar" → `/refugios/:id/editar` → "Guardar cambios"; el refugio conserva sus mascotas; nombre o ciudad vacíos se rechazan |
+| 6. Eliminar refugio | "Eliminar" (con confirmación); si tiene mascotas, eventos u otros datos asociados se muestra "No se puede eliminar …"; si no tiene, desaparece del listado |
+
+### HU11 — Gestionar eventos del refugio
+
+Como administrador de refugio quiero programar y gestionar los eventos de un refugio (jornadas, ferias, vacunaciones) para que los adoptantes sepan qué actividades se realizan.
+
+**Cómo visualizarla**
+
+1. Levanta el back-end y carga datos de prueba (la base se borra al reiniciar el back; el script se ejecuta una sola vez por arranque):
+   ```powershell
+   .\infra\seed-eventos.ps1
+   ```
+   Crea (o reutiliza) "Refugio Adopciones" con 3 eventos (uno próximo con tipo "Jornada", uno ya realizado sin tipo y otro próximo) y un segundo refugio, "Refugio Huellitas", con 1 evento propio. Si el refugio ya tiene eventos, los omite. Si PowerShell bloquea el script: `powershell -ExecutionPolicy Bypass -File .\infra\seed-eventos.ps1`.
+2. Ejecuta `npm run dev`, abre `http://localhost:5173/refugios`, pulsa "Ver detalle" en un refugio y luego "Eventos" (o abre directamente `/refugios/:id/eventos`).
+
+| Criterio de aceptación | Dónde verlo |
+| --- | --- |
+| 1. Crear evento válido | En `/refugios/:id/eventos`, panel "Nuevo evento": escribir nombre y fecha (el tipo es opcional) → "Programar evento"; aparece una tarjeta con la insignia "Próximo" (o "Realizado" si la fecha ya pasó) y el aviso "Evento programado correctamente." |
+| 2. Datos obligatorios | "Programar evento" con el formulario vacío → "El nombre es obligatorio." y "La fecha es obligatoria."; lo mismo al guardar un evento editado sin nombre o sin fecha |
+| 3. Refugio inexistente | `/refugios/9999/eventos` → "Refugio no encontrado."; no se muestra el formulario |
+| 4. Consultar eventos | `/refugios/:id/eventos` (lista) y "Ver detalle" → `/refugios/:id/eventos/:eventId` con nombre, fecha, tipo y estado; si el evento no existe (`/refugios/1/eventos/9999`), "Evento no encontrado." |
+| 5. Evento de otro refugio | El script imprime una URL con el evento de Huellitas bajo el primer refugio → "Este evento pertenece a otro refugio."; lo mismo ocurre al editarlo o eliminarlo |
+| 6. Editar evento | "Editar" en una tarjeta → el panel pasa a "Editar evento" con los datos cargados → "Guardar cambios"; el evento conserva su refugio y el botón "Cancelar" vuelve al formulario nuevo |
+| 7. Borrar evento | "Eliminar" (con confirmación) en un evento próximo: desaparece de la lista; en un evento ya realizado → "No se puede eliminar un evento que ya ocurrió." y la tarjeta se queda |
+
 ## Pruebas
 
 ```powershell

@@ -15,6 +15,8 @@ import ReviewListPage from '../pages/ReviewListPage';
 import ShelterCreatePage from '../pages/ShelterCreatePage';
 import ShelterDetailPage from '../pages/ShelterDetailPage';
 import ShelterEditPage from '../pages/ShelterEditPage';
+import ShelterEventDetailPage from '../pages/ShelterEventDetailPage';
+import ShelterEventsPage from '../pages/ShelterEventsPage';
 import ShelterListPage from '../pages/ShelterListPage';
 import { PHOTO_OWNER } from '../utils/photoOwners';
 
@@ -47,6 +49,8 @@ export default function AppRoutes() {
           path="/refugios/:id/fotos/:photoId"
           element={<PhotoDetailPage owner={PHOTO_OWNER.SHELTER} />}
         />
+        <Route path="/refugios/:id/eventos" element={<ShelterEventsPage />} />
+        <Route path="/refugios/:id/eventos/:eventId" element={<ShelterEventDetailPage />} />
       </Route>
     </Routes>
   );
