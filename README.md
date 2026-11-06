@@ -94,6 +94,30 @@ Como administrador de refugio quiero asociar fotos a una mascota o a un refugio 
 | 7. Editar foto | "Editar" bajo una foto → el panel pasa a "Editar foto" con el destino bloqueado → "Guardar cambios"; la foto conserva su asociación y una URL vacía se rechaza |
 | 8. Borrar foto | "Eliminar" (con confirmación); la foto desaparece de la lista; si ya no existe, "Foto no encontrada." |
 
+### HU04 — Calificar el proceso de adopción
+
+Como adoptante quiero calificar el proceso de adopción con una calificación de 1 a 5 y un comentario opcional para compartir mi experiencia y ayudar a mejorar el servicio.
+
+**Cómo visualizarla**
+
+1. Levanta el back-end y carga datos de prueba (la base se borra al reiniciar el back; el script se ejecuta una sola vez por arranque):
+   ```powershell
+   .\infra\seed-reviews.ps1
+   ```
+   Crea (o reutiliza) a Laura Gómez, con 3 reseñas (5, 4 y 4), y a Carlos Pérez, con 2 reseñas (una sin comentario). Si PowerShell bloquea el script: `powershell -ExecutionPolicy Bypass -File .\infra\seed-reviews.ps1`.
+2. Ejecuta `npm run dev` y abre `http://localhost:5173/mis-resenas`. Como todavía no hay inicio de sesión, "Mis reseñas" abre las reseñas del primer adoptante registrado (Laura).
+
+| Criterio de aceptación | Dónde verlo |
+| --- | --- |
+| 1. Crear reseña válida | En el panel "Nueva reseña", elegir de 1 a 5 estrellas y, si se quiere, un comentario → "Publicar reseña"; aparece en la lista y el promedio se actualiza |
+| 2. Calificación inválida o ausente | "Publicar reseña" sin elegir estrellas → "Elige una calificación de 1 a 5."; si el back rechaza una calificación fuera de rango, se muestra su mensaje y no se crea la reseña |
+| 3. Adoptante inexistente | `/adoptantes/9999/resenas` → "Adoptante no encontrado."; no se muestra el formulario |
+| 4. Consultar reseñas | `/mis-resenas` (lista con promedio) y "Ver detalle" → `/adoptantes/:adopterId/resenas/:reviewId` |
+| 5. Reseña de otro adoptante | El script imprime una URL con la reseña de Carlos bajo el adoptante de Laura → "Esta reseña pertenece a otro adoptante."; lo mismo ocurre al editarla o eliminarla |
+| 6. Editar reseña | "Editar" en una tarjeta → el panel pasa a "Editar reseña" → "Guardar cambios"; una calificación inválida se rechaza |
+| 7. Eliminar reseña | "Eliminar" (con confirmación); la reseña desaparece de la lista |
+
+
 ### HU05 — Registrar adopción
 
 Como administrador de refugio quiero registrar una adopción con fecha, estado, mascota, adoptante y veterinario responsable válidos para formalizar y hacer seguimiento al proceso.
@@ -120,28 +144,30 @@ Como administrador de refugio quiero registrar una adopción con fecha, estado, 
 | 9. Borrar adopción | En el detalle, "Eliminar adopción" (con confirmación); vuelve al listado y ya no aparece |
 
 
-### HU04 — Calificar el proceso de adopción
 
-Como adoptante quiero calificar el proceso de adopción con una calificación de 1 a 5 y un comentario opcional para compartir mi experiencia y ayudar a mejorar el servicio.
+### HU06 — Registrar devolución de una mascota
+
+Como administrador de refugio quiero registrar la devolución de una mascota adoptada con fecha y motivo para dejar constancia y poder volver a ofrecerla en adopción.
 
 **Cómo visualizarla**
 
-1. Levanta el back-end y carga datos de prueba (la base se borra al reiniciar el back; el script se ejecuta una sola vez por arranque):
+1. Levanta el back-end y carga datos de prueba (la base se borra al reiniciar el back; los scripts se ejecutan una sola vez por arranque y en este orden):
    ```powershell
-   .\infra\seed-reviews.ps1
+   .\infra\seed-adoptions.ps1
+   .\infra\seed-returns.ps1
    ```
-   Crea (o reutiliza) a Laura Gómez, con 3 reseñas (5, 4 y 4), y a Carlos Pérez, con 2 reseñas (una sin comentario). Si PowerShell bloquea el script: `powershell -ExecutionPolicy Bypass -File .\infra\seed-reviews.ps1`.
-2. Ejecuta `npm run dev` y abre `http://localhost:5173/mis-resenas`. Como todavía no hay inicio de sesión, "Mis reseñas" abre las reseñas del primer adoptante registrado (Laura).
+   El segundo registra la devolución de la adopción de Michi (Carlos Pérez) y deja las demás adopciones sin devolución. Si PowerShell bloquea un script: `powershell -ExecutionPolicy Bypass -File .\infra\seed-returns.ps1`.
+2. Ejecuta `npm run dev`, abre el detalle de una adopción (`/adopciones/:id`) y pulsa **Devolución**, o usa las URLs que imprime el script (`/adopciones/:id/devolucion`).
 
 | Criterio de aceptación | Dónde verlo |
 | --- | --- |
-| 1. Crear reseña válida | En el panel "Nueva reseña", elegir de 1 a 5 estrellas y, si se quiere, un comentario → "Publicar reseña"; aparece en la lista y el promedio se actualiza |
-| 2. Calificación inválida o ausente | "Publicar reseña" sin elegir estrellas → "Elige una calificación de 1 a 5."; si el back rechaza una calificación fuera de rango, se muestra su mensaje y no se crea la reseña |
-| 3. Adoptante inexistente | `/adoptantes/9999/resenas` → "Adoptante no encontrado."; no se muestra el formulario |
-| 4. Consultar reseñas | `/mis-resenas` (lista con promedio) y "Ver detalle" → `/adoptantes/:adopterId/resenas/:reviewId` |
-| 5. Reseña de otro adoptante | El script imprime una URL con la reseña de Carlos bajo el adoptante de Laura → "Esta reseña pertenece a otro adoptante."; lo mismo ocurre al editarla o eliminarla |
-| 6. Editar reseña | "Editar" en una tarjeta → el panel pasa a "Editar reseña" → "Guardar cambios"; una calificación inválida se rechaza |
-| 7. Eliminar reseña | "Eliminar" (con confirmación); la reseña desaparece de la lista |
+| 1. Registrar devolución válida | En una adopción sin devolución (por ejemplo la de Rocky), elegir la fecha (hoy por defecto) y escribir el motivo → "Registrar devolución"; la adopción pasa a "Devuelta" y la mascota queda "Disponible" (también en `/mascotas`) |
+| 2. Datos obligatorios | Enviar sin motivo → "El motivo es obligatorio."; sin fecha → "La fecha de devolución es obligatoria."; no se registra nada |
+| 3. Una sola devolución por adopción | Una adopción con devolución (la de Michi) no ofrece el formulario; si otra persona la registra antes de enviar, el back la rechaza y se muestra "Esta adopción ya tiene una devolución registrada." junto con la que existe |
+| 4. Consultar devolución | `/adopciones/:id/devolucion` de una adopción con devolución → tarjeta "Devolución registrada" con la fecha y el motivo |
+| 5. Adopción sin devolución | Una adopción sin devolución muestra "Esta adopción todavía no tiene una devolución registrada."; si la devolución se borra en otra pestaña, editar o eliminar muestra "Devolución no encontrada."; `/adopciones/9999/devolucion` → "Adopción no encontrada." |
+| 6. Editar devolución | "Editar devolución" → el panel pasa a "Editar devolución" → "Guardar cambios"; si falta la fecha o el motivo, el cambio se rechaza |
+| 7. Borrar devolución | "Eliminar devolución" (con confirmación); la devolución desaparece y vuelve a ofrecerse el registro. El back solo la desasocia: la adopción sigue "Devuelta" y la mascota disponible |
 
 ## Pruebas
 

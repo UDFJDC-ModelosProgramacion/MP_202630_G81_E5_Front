@@ -345,3 +345,33 @@ select.form-control-brand {
 @media (max-width: 960px) {
   .photo-layout { grid-template-columns: 1fr; }
 }
+
+/* ---- Devolución de una mascota (Registrar devolución) ---- */
+.return-header { justify-content: flex-start; align-items: center; gap: 20px; }
+.return-layout { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; align-items: start; }
+.return-card__title { margin: 0 0 24px; font-size: 26px; font-weight: 800; }
+.return-summary__list { display: grid; grid-template-columns: 1fr 1fr; gap: 24px 28px; margin: 0; }
+.return-summary__list--single { grid-template-columns: 1fr; }
+.return-summary__list dt { font-size: 17px; font-weight: 400; color: var(--color-muted); }
+.return-summary__list dd { margin: 4px 0 0; }
+.return-summary__value { font-size: 20px; font-weight: 700; }
+.return-summary__detail { font-size: 17px; color: var(--color-muted); }
+.return-summary__note {
+  margin: 28px 0 0; padding: 16px 20px; border-radius: 12px;
+  background: var(--color-bg); font-size: 18px; color: var(--color-muted);
+}
+.return-record__reason { font-size: 20px; line-height: 1.5; overflow-wrap: anywhere; }
+@media (max-width: 960px) {
+  .return-layout { grid-template-columns: 1fr; }
+  .return-summary__list { grid-template-columns: 1fr; }
+}
+.return-form__reason { min-height: 150px; padding: 14px 18px; resize: vertical; }
+.return-form__reason.form-control-brand--invalid { padding: 13px 17px; }
+.return-form__hint { margin: 0 0 24px; font-size: 17px; color: var(--color-muted); }
+.return-form__actions { display: flex; justify-content: flex-end; gap: 14px; }
+.return-record__actions {
+  display: flex; flex-wrap: wrap; gap: 14px; margin-top: 28px;
+  padding-top: 24px; border-top: 1px solid var(--color-border);
+}
+.return-btn-danger { color: var(--color-error); border-color: var(--color-error); }
+.return-record__actions button:disabled { opacity: 0.6; cursor: not-allowed; }
