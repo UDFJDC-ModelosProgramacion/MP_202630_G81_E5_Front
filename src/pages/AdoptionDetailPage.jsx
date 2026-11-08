@@ -109,6 +109,11 @@ export default function AdoptionDetailPage() {
         <Link to="/adopciones" className="btn-outline-brand">
           Volver al listado
         </Link>
+                {visibleAdoption && (
+          <Link to={`/adopciones/${visibleAdoption.id}/devolucion`} className="btn-outline-brand">
+            Devolución
+          </Link>
+        )}
         {visibleAdoption && (
           <button
             type="button"
