@@ -34,6 +34,7 @@ describe('ShelterDetailPage', () => {
     expect(screen.getByText('2')).toBeTruthy();
     expect(screen.getByRole('link', { name: 'Editar' }).getAttribute('href')).toBe('/refugios/1/editar');
     expect(screen.getByRole('link', { name: 'Fotos' }).getAttribute('href')).toBe('/refugios/1/fotos');
+    expect(screen.getByRole('link', { name: 'Eventos' }).getAttribute('href')).toBe('/refugios/1/eventos');
   });
 
   it('muestra 0 eventos cuando el refugio no tiene', async () => {
@@ -48,6 +49,7 @@ describe('ShelterDetailPage', () => {
     renderPage();
     expect(await screen.findByText('Refugio no encontrado.')).toBeTruthy();
     expect(screen.queryByRole('link', { name: 'Editar' })).toBeNull();
+    expect(screen.queryByRole('link', { name: 'Eventos' })).toBeNull();
   });
 
   it('muestra el error de conexión', async () => {
