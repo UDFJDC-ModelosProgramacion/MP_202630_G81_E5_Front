@@ -19,6 +19,8 @@ import ShelterEditPage from '../pages/ShelterEditPage';
 import ShelterEventDetailPage from '../pages/ShelterEventDetailPage';
 import ShelterEventsPage from '../pages/ShelterEventsPage';
 import ShelterListPage from '../pages/ShelterListPage';
+import ShelterVideosPage from '../pages/ShelterVideosPage';
+import VideoDetailPage from '../pages/VideoDetailPage';
 import { PHOTO_OWNER } from '../utils/photoOwners';
 
 export default function AppRoutes() {
@@ -47,12 +49,11 @@ export default function AppRoutes() {
         <Route path="/refugios/:id" element={<ShelterDetailPage />} />
         <Route path="/refugios/:id/editar" element={<ShelterEditPage />} />
         <Route path="/refugios/:id/fotos" element={<PhotoListPage owner={PHOTO_OWNER.SHELTER} />} />
-        <Route
-          path="/refugios/:id/fotos/:photoId"
-          element={<PhotoDetailPage owner={PHOTO_OWNER.SHELTER} />}
-        />
+        <Route path="/refugios/:id/fotos/:photoId" element={<PhotoDetailPage owner={PHOTO_OWNER.SHELTER} />}/>
         <Route path="/refugios/:id/eventos" element={<ShelterEventsPage />} />
         <Route path="/refugios/:id/eventos/:eventId" element={<ShelterEventDetailPage />} />
+        <Route path="/refugios/:id/videos" element={<ShelterVideosPage />} />
+        <Route path="/refugios/:id/videos/:videoId" element={<VideoDetailPage />} />
       </Route>
     </Routes>
   );

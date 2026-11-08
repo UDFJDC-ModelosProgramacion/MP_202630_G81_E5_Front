@@ -67,7 +67,6 @@ Como administrador de refugio quiero registrar una mascota con nombre, especie y
 | 5. Consultar mascotas | `/mascotas` (listado) y clic en el nombre → `/mascotas/:id`; si no existe, "Mascota no encontrada." |
 | 6. Editar mascota | Botón "Editar" → `/mascotas/:id/editar`; conserva el refugio; datos inválidos se rechazan |
 | 7. Borrar mascota | Botón "Eliminar"; con adopciones o fotos asociadas se muestra el error; si no existe, "Mascota no encontrada." |
- | 7. Eliminar reseña | "Eliminar" (con confirmación); la reseña desaparece de la lista |
 
 ### HU02 — Gestionar fotos
 
@@ -93,6 +92,30 @@ Como administrador de refugio quiero asociar fotos a una mascota o a un refugio 
 | 6. Foto de otro destino | El script imprime los ids; abrir `/mascotas/<id de Luna>/fotos/<id de una foto del refugio>` → "La foto no pertenece a esta mascota." (y lo equivalente en `/refugios/...`); lo mismo ocurre al editarla o eliminarla |
 | 7. Editar foto | "Editar" bajo una foto → el panel pasa a "Editar foto" con el destino bloqueado → "Guardar cambios"; la foto conserva su asociación y una URL vacía se rechaza |
 | 8. Borrar foto | "Eliminar" (con confirmación); la foto desaparece de la lista; si ya no existe, "Foto no encontrada." |
+
+### HU03 — Gestionar videos del refugio
+
+Como administrador de refugio quiero cargar videos de mi refugio para que los adoptantes reconozcan las instalaciones.
+
+**Cómo visualizarla**
+
+1. Levanta el back-end y carga datos de prueba (la base se borra al reiniciar el back). Primero las mascotas y los refugios, luego los videos:
+   ```powershell
+   .\infra\seed-data.ps1
+   .\infra\seed-videos.ps1
+   ```
+    `seed-videos.ps1` usa los dos primeros refugios existentes (crea los que falten). Crea 3 videos en el primero (dos archivos `.mp4` y un enlace de YouTube, que se reproducen en el detalle y requieren internet) y 1 en el segundo, e imprime sus ids y las URLs de cada caso de prueba. Si PowerShell bloquea el script: `powershell -ExecutionPolicy Bypass -File .\infra\seed-videos.ps1`.
+2. Ejecuta `npm run dev`, abre `http://localhost:5173/refugios`, entra al detalle de un refugio y pulsa "Videos" (también puedes ir directo a `/refugios/:id/videos`).
+
+| Criterio de aceptación | Dónde verlo |
+| --- | --- |
+| 1. Crear video válido | En `/refugios/:id/videos`, panel "Cargar video": escribir una URL → "Cargar video"; aparece en "Videos publicados" y el contador sube. Elegir otro refugio en el select abre la lista de ese refugio |
+| 2. URL inválida | Dejar vacía la URL al cargar o al editar → "La URL es obligatoria."; si el back la rechaza, se muestra su mensaje |
+| 3. Refugio inexistente | `/refugios/9999/videos` → "Refugio no encontrado."; también al cargar un video si el refugio ya no existe |
+| 4. Consultar videos | `/refugios/:id/videos` (lista) y clic en la URL de un video → `/refugios/:id/videos/:videoId`, donde se reproduce si es un archivo `.mp4`/`.webm`/`.ogg` o un enlace de YouTube; si no existe (`/refugios/:id/videos/9999`), "Video no encontrado." |
+| 5. Video de otro refugio | El script imprime los ids; abrir `/refugios/<id del segundo refugio>/videos/<id de un video del primero>` → "Este video pertenece a otro refugio."; editar o eliminar desde otro refugio se rechaza con el mismo mensaje (por la UI solo se llega al detalle; esos casos se prueban por la API con `PUT` o `DELETE /api/shelters/<otro>/videos/<id>`) |
+| 6. Editar video | "Editar" en la fila → el panel pasa a "Editar video" con el refugio bloqueado → "Guardar cambios"; el video conserva su refugio y una URL vacía se rechaza |
+| 7. Borrar video | "Eliminar" (con confirmación); el video desaparece de la lista y baja el contador; si ya no existe, "Video no encontrado." |
 
 ### HU04 — Calificar el proceso de adopción
 
