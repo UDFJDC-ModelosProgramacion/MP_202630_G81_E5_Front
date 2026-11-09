@@ -3,6 +3,9 @@ import MainLayout from '../layouts/MainLayout';
 import AdoptionCreatePage from '../pages/AdoptionCreatePage';
 import AdoptionDetailPage from '../pages/AdoptionDetailPage';
 import AdoptionListPage from '../pages/AdoptionListPage';
+import MessageDetailPage from '../pages/MessageDetailPage';
+import MessageHomePage from '../pages/MessageHomePage';
+import MessageListPage from '../pages/MessageListPage';
 import PetCreatePage from '../pages/PetCreatePage';
 import PetDetailPage from '../pages/PetDetailPage';
 import PetEditPage from '../pages/PetEditPage';
@@ -42,6 +45,9 @@ export default function AppRoutes() {
         <Route path="/mis-resenas" element={<ReviewHomePage />} />
         <Route path="/adoptantes/:adopterId/resenas" element={<ReviewListPage />} />
         <Route path="/adoptantes/:adopterId/resenas/:reviewId" element={<ReviewDetailPage />} />
+        <Route path="/mis-mensajes" element={<MessageHomePage />} />
+        <Route path="/adoptantes/:adopterId/mensajes" element={<MessageListPage />} />
+        <Route path="/adoptantes/:adopterId/mensajes/:messageId" element={<MessageDetailPage />} />
         <Route path="/adopciones/:id" element={<AdoptionDetailPage />} />
         <Route path="/adopciones/:id/devolucion" element={<ReturnRecordPage />} />
         <Route path="/refugios" element={<ShelterListPage />} />
