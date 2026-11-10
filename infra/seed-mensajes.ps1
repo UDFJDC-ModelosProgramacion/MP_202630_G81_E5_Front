@@ -85,7 +85,7 @@ foreach ($adopter in @($laura, $carlos)) {
   }
 }
 
-$foreign = @(Invoke-RestMethod -Uri "$Base/adopters/$($carlos.id)/messages")[0]
+$foreign = @(Invoke-RestMethod -Uri "$Base/adopters/$($carlos.id)/messages" | Where-Object { $_ })[0]
 Write-Host ""
 Write-Host "Mis mensajes (Laura): http://localhost:5173/mis-mensajes" -ForegroundColor Green
 Write-Host "Mensaje de otro adoptante (debe rechazarse): http://localhost:5173/adoptantes/$($laura.id)/mensajes/$($foreign.id)" -ForegroundColor Green
