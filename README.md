@@ -323,6 +323,29 @@ Como administrador de refugio quiero programar y gestionar los eventos de un ref
 | 6. Editar evento | "Editar" en una tarjeta → el panel pasa a "Editar evento" con los datos cargados → "Guardar cambios"; el evento conserva su refugio y el botón "Cancelar" vuelve al formulario nuevo |
 | 7. Borrar evento | "Eliminar" (con confirmación) en un evento próximo: desaparece de la lista; en un evento ya realizado → "No se puede eliminar un evento que ya ocurrió." y la tarjeta se queda |
 
+### HU12 — Enviar y gestionar mensajes
+
+Como adoptante quiero enviar y gestionar mis mensajes para comunicarme con el refugio durante el proceso de adopción.
+
+**Cómo visualizarla**
+
+1. Levanta el back-end y carga datos de prueba (la base se borra al reiniciar el back; el script se ejecuta una sola vez por arranque):
+   ```powershell
+   .\infra\seed-mensajes.ps1
+   ```
+   Crea (o reutiliza) a los adoptantes "Laura Gómez", con 3 mensajes, y "Carlos Pérez", con 2 mensajes propios. Si el adoptante ya tiene mensajes, los omite. Si tu back corre en otro puerto, agrega `-Base "http://localhost:8999/api"`. Si PowerShell bloquea el script: `powershell -ExecutionPolicy Bypass -File .\infra\seed-mensajes.ps1`.
+2. Ejecuta `npm run dev` y abre `http://localhost:5173/mis-mensajes` (el enlace "Mis mensajes" del menú); te lleva a los mensajes del primer adoptante registrado.
+
+| Criterio de aceptación | Dónde verlo |
+| --- | --- |
+| 1. Enviar mensaje con contenido | En `/mis-mensajes`, panel "Nuevo mensaje": escribir el contenido → "Enviar mensaje"; aparece una tarjeta con la insignia "Enviado", la fecha de hoy y el aviso "Mensaje enviado correctamente." |
+| 2. Contenido obligatorio | "Enviar mensaje" con el formulario vacío → "El mensaje es obligatorio." |
+| 3. Adoptante inexistente | `/adoptantes/9999/mensajes` → "Adoptante no encontrado."; no se muestra el formulario |
+| 4. Consultar mensajes | `/adoptantes/:adopterId/mensajes` (lista) y "Ver detalle" → `/adoptantes/:adopterId/mensajes/:messageId` con fecha, estado y mensaje; si el mensaje no existe (`/adoptantes/1/mensajes/9999`), "Mensaje no encontrado." |
+| 5. Mensaje de otro adoptante | El script imprime una URL con un mensaje de Carlos bajo Laura → "Este mensaje pertenece a otro adoptante." |
+| 6. Mensaje ya enviado no se edita | "Editar" en una tarjeta → el panel pasa a "Editar mensaje" con el contenido cargado → "Guardar cambios" → aviso rojo "No se puede editar un mensaje que ya fue enviado."; el contenido se conserva y "Cancelar" vuelve al formulario nuevo |
+| 7. Borrar mensaje propio | "Eliminar" (con confirmación) en una tarjeta: desaparece de la lista y aparece "Mensaje eliminado correctamente." |
+
 ## Pruebas
 
 ```powershell

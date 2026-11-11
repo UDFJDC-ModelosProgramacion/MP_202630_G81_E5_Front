@@ -6,6 +6,7 @@ const navItems = [
   { label: 'Adoptantes', to: '/adoptantes', notActive: /^\/adoptantes\/[^/]+\/resenas/ },
   { label: 'Adopciones', to: '/adopciones' },
   { label: 'Mis reseñas', to: '/mis-resenas', alsoActive: /^\/adoptantes\/[^/]+\/resenas/ },
+  { label: 'Mis mensajes', to: '/mis-mensajes', alsoActive: /^\/adoptantes\/[^/]+\/mensajes/ },
   { label: 'Refugios', to: '/refugios' },
 ];
 
@@ -63,3 +64,4 @@ export default function Header() {
     </header>
   );
 }
+

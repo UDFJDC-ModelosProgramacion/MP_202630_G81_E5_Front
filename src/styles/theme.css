@@ -437,6 +437,33 @@ select.form-control-brand {
 .video-player--embed { position: relative; aspect-ratio: 16 / 9; max-height: none; overflow: hidden; }
 .video-player--embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 .video-player__error { margin: 16px 0 0; padding: 12px 16px; border-radius: 12px; background: var(--color-error-soft, #FDF1F1); color: var(--color-error); font-size: 16px; }
+.message-layout {
+  display: grid; grid-template-columns: minmax(0, 1fr) 400px;
+  gap: 32px; align-items: start;
+}
+.message-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; }
+.message-card { padding: 22px 28px; background: #fff; border: 1px solid var(--color-border); border-radius: 16px; }
+.message-card--editing { border: 2px solid var(--color-primary); padding: 21px 27px; }
+.message-card__header { display: flex; align-items: center; gap: 12px; }
+.message-card__badge { display: inline-block; padding: 4px 12px; border-radius: 999px; font-size: 14px; font-weight: 700; background: var(--color-success-soft); color: var(--color-success); }
+.message-card__date { font-size: 16px; font-weight: 600; color: var(--color-muted); }
+.message-card__content { margin: 12px 0 0; font-size: 18px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.message-card__actions { display: flex; align-items: center; gap: 14px; margin-top: 16px; }
+.message-card__button {
+  border: 0; background: none; padding: 0; font-size: 16px; font-weight: 600;
+  color: var(--color-primary); text-decoration: none; cursor: pointer;
+}
+.message-card__button:hover { text-decoration: underline; }
+.message-card__button--danger { color: var(--color-error); }
+.message-card__button:disabled { opacity: 0.6; cursor: not-allowed; text-decoration: none; }
+.message-panel__title { margin: 0 0 16px; font-size: 24px; font-weight: 800; }
+.message-form__content { min-height: 120px; padding: 12px 18px; resize: vertical; }
+.message-form__content.form-control-brand--invalid { padding: 11px 17px; }
+.message-detail__wide { grid-column: 1 / -1; }
+@media (max-width: 960px) {
+  .message-layout { grid-template-columns: 1fr; }
+}
+
 /* HU07 - adoptantes */
 .adopter-profile { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; }
 .adopter-card__title { font-size: 24px; font-weight: 700; margin: 0 0 22px; }
