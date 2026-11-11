@@ -1,8 +1,15 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout';
+import AdopterCreatePage from '../pages/AdopterCreatePage';
+import AdopterDetailPage from '../pages/AdopterDetailPage';
+import AdopterEditPage from '../pages/AdopterEditPage';
+import AdopterListPage from '../pages/AdopterListPage';
 import AdoptionCreatePage from '../pages/AdoptionCreatePage';
 import AdoptionDetailPage from '../pages/AdoptionDetailPage';
 import AdoptionListPage from '../pages/AdoptionListPage';
+import TrialCohabitationPage from '../pages/TrialCohabitationPage';
+import NotificationDetailPage from '../pages/NotificationDetailPage';
+import NotificationListPage from '../pages/NotificationListPage';
 import PetCreatePage from '../pages/PetCreatePage';
 import PetDetailPage from '../pages/PetDetailPage';
 import PetEditPage from '../pages/PetEditPage';
@@ -44,6 +51,12 @@ export default function AppRoutes() {
         <Route path="/adoptantes/:adopterId/resenas/:reviewId" element={<ReviewDetailPage />} />
         <Route path="/adopciones/:id" element={<AdoptionDetailPage />} />
         <Route path="/adopciones/:id/devolucion" element={<ReturnRecordPage />} />
+        <Route path="/adopciones/:id/convivencia-prueba/nueva" element={<TrialCohabitationPage mode="create" />} />
+        <Route path="/adopciones/:id/convivencia-prueba/editar" element={<TrialCohabitationPage mode="edit" />} />
+        <Route path="/adoptantes" element={<AdopterListPage />} />
+        <Route path="/adoptantes/nuevo" element={<AdopterCreatePage />} />
+        <Route path="/adoptantes/:id" element={<AdopterDetailPage />} />
+        <Route path="/adoptantes/:id/editar" element={<AdopterEditPage />} />
         <Route path="/refugios" element={<ShelterListPage />} />
         <Route path="/refugios/nuevo" element={<ShelterCreatePage />} />
         <Route path="/refugios/:id" element={<ShelterDetailPage />} />
@@ -54,6 +67,8 @@ export default function AppRoutes() {
         <Route path="/refugios/:id/eventos/:eventId" element={<ShelterEventDetailPage />} />
         <Route path="/refugios/:id/videos" element={<ShelterVideosPage />} />
         <Route path="/refugios/:id/videos/:videoId" element={<VideoDetailPage />} />
+        <Route path="/refugios/:id/notificaciones" element={<NotificationListPage />} />
+        <Route path="/refugios/:id/notificaciones/:notificationId" element={<NotificationDetailPage />} />
       </Route>
     </Routes>
   );

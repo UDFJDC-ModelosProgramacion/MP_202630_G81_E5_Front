@@ -60,6 +60,11 @@ export default function ShelterDetailPage() {
           </Link>
         )}
         {shelter && (
+          <Link to={`/refugios/${shelter.id}/notificaciones`} className="btn-outline-brand">
+            Notificaciones
+          </Link>
+        )}
+        {shelter && (
           <Link to={`/refugios/${shelter.id}/videos`} className="btn-outline-brand">
             Videos
           </Link>
