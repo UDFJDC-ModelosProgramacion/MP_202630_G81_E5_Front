@@ -192,6 +192,92 @@ Como administrador de refugio quiero registrar la devolución de una mascota ado
 | 6. Editar devolución | "Editar devolución" → el panel pasa a "Editar devolución" → "Guardar cambios"; si falta la fecha o el motivo, el cambio se rechaza |
 | 7. Borrar devolución | "Eliminar devolución" (con confirmación); la devolución desaparece y vuelve a ofrecerse el registro. El back solo la desasocia: la adopción sigue "Devuelta" y la mascota disponible |
 
+### HU07 — Registrar y gestionar adoptante
+
+Como adoptante quiero registrar mis datos personales (nombre, correo electrónico y teléfono) para poder participar en los procesos de adopción.
+
+**Cómo visualizarla**
+
+1. Levanta el back-end y carga datos de prueba (la base se borra al reiniciar el back; el script se ejecuta una sola vez por arranque):
+   ```powershell
+   .\infra\seed-adopters.ps1
+   ```
+   Crea (o reutiliza por correo) a Mariana Ruiz, Andrés Molina (sin teléfono) y Valentina Rojas, sin adopciones, y a Camilo Herrera, con una adopción de la mascota Canela, de modo que al eliminarlo el back responde 412. El correo de Mariana sirve para probar el correo repetido. Si PowerShell bloquea el script: `powershell -ExecutionPolicy Bypass -File .\infra\seed-adopters.ps1`.
+2. Ejecuta `npm run dev` y abre `http://localhost:5173/adoptantes`.
+
+| Criterio de aceptación | Dónde verlo |
+| --- | --- |
+| 1. Crear adoptante válido | `/adoptantes/nuevo` → nombre, correo y, si se quiere, teléfono → "Registrar"; aparece en el listado |
+| 2. Datos obligatorios | Dejar vacío el nombre o el correo y enviar → mensaje de error bajo el campo; no se registra nada |
+| 3. Correo repetido | Registrar con el correo de Mariana (`mariana.ruiz@adoptaya.test`) → el error aparece bajo el campo de correo, en español |
+| 4. Consultar adoptante | `/adoptantes` (listado) y "Ver perfil" → `/adoptantes/:id`; si no existe (`/adoptantes/9999`), "Adoptante no encontrado." |
+| 5. Editar adoptante | "Editar" → `/adoptantes/:id/editar` → "Guardar"; conservar el propio correo es válido y se conserva la dirección; un correo de otro adoptante se rechaza |
+| 6. Borrar adoptante | "Eliminar" (con confirmación) en Mariana o Valentina: desaparece del listado; en Camilo (tiene una adopción) el back responde 412 y se muestra el mensaje de rechazo |
+
+**Notas para quien revise**
+
+- El back usa `/adopters`; las rutas del front son `/adoptantes...`.
+- El back devuelve el error de correo repetido en inglés; el front lo traduce al español.
+- Al editar un adoptante que tiene adopciones, el PUT del back elimina esas adopciones (probado con Camilo: antes 1, después 0, y la adopción desaparece de `/api/adoptions`). Se probó reenviar `adoptions` sin `adopter` y con `adopter: { id }`, y en ambos casos se pierden. No tiene arreglo desde el front; queda pendiente para el equipo del back. Tras esa prueba hay que reiniciar el back, porque la mascota queda no disponible.
+
+### HU08 — Gestionar convivencia de prueba
+
+Como administrador de refugio quiero registrar la convivencia de prueba de una adopción con fecha de inicio y fecha de fin opcional para hacer seguimiento al periodo de prueba.
+
+**Cómo visualizarla**
+
+1. Levanta el back-end y carga datos de prueba (la base se borra al reiniciar el back; el script se ejecuta una sola vez por arranque):
+   ```powershell
+   .\infra\seed-trial-cohabitation.ps1
+   ```
+   Crea (o reutiliza) el refugio, al veterinario Dr. Andrés Ríos, a la adoptante Laura Gómez y 4 adopciones: Firulais y Kira sin convivencia, Pelusa con fecha de inicio y de fin, y Bruno solo con fecha de inicio. Imprime los ids, las URLs y el JSON de la convivencia de Pelusa. Si PowerShell bloquea el script: `powershell -ExecutionPolicy Bypass -File .\infra\seed-trial-cohabitation.ps1`.
+2. Ejecuta `npm run dev`, abre `http://localhost:5173/adopciones` y entra al detalle de una adopción: la sección "Convivencia de prueba" muestra las fechas o el botón "Registrar convivencia".
+
+| Criterio de aceptación | Dónde verlo |
+| --- | --- |
+| 1. Registrar convivencia válida | Detalle de Firulais → "Registrar convivencia" (`/adopciones/:id/convivencia-prueba/nueva`): inicio y, si se quiere, fin posterior → "Registrar convivencia"; vuelve al detalle con aviso verde y las fechas |
+| 2. Fecha de inicio obligatoria | Dejar vacío el inicio y enviar → "La fecha de inicio es obligatoria."; no se registra nada |
+| 3. Fecha de fin inválida | Fin anterior o igual al inicio → "La fecha de fin debe ser posterior a la fecha de inicio."; lo mismo al editar |
+| 4. Una sola convivencia por adopción | `/adopciones/<id de Pelusa>/convivencia-prueba/nueva` → "Esta adopción ya tiene una convivencia de prueba registrada." sin formulario; si otra persona la registra antes de enviar, el back la rechaza y se muestra el mismo mensaje |
+| 5. Adopción inexistente | `/adopciones/9999/convivencia-prueba/nueva` → "Adopción no encontrada." |
+| 6. Consultar convivencia | Detalle de Pelusa (fechas), de Bruno ("Sin fecha de fin") y de Firulais ("Esta adopción no tiene una convivencia de prueba registrada." con el botón para registrarla) |
+| 7. Editar convivencia | "Editar convivencia" → `/adopciones/:id/convivencia-prueba/editar` → "Guardar cambios"; conserva el resultado (`outcome`); fechas inválidas se rechazan |
+| 8. Borrar convivencia | "Eliminar convivencia" (con confirmación); aparece aviso verde y vuelve el botón "Registrar convivencia"; si ya no existe, "Esta adopción no tiene una convivencia de prueba registrada." |
+
+### HU09 — Gestionar notificaciones del refugio
+
+Como administrador de refugio quiero enviar notificaciones por un canal válido (EMAIL, SMS o PUSH) con un mensaje para mantener informados a los usuarios.
+
+**Cómo visualizarla**
+
+1. Levanta el back-end y carga datos de prueba (la base se borra al reiniciar el back; el script se ejecuta una sola vez por arranque):
+   ```powershell
+   .\infra\seed-notifications.ps1
+   ```
+   Reutiliza los refugios existentes, crea notificaciones de prueba e imprime las URLs de los criterios 4 y 6. Si PowerShell bloquea el script: `powershell -ExecutionPolicy Bypass -File .\infra\seed-notifications.ps1`.
+2. Ejecuta `npm run dev`, abre el detalle de un refugio (`/refugios/:id`) y entra por el botón "Notificaciones", o directamente a `/refugios/:id/notificaciones`.
+
+| Criterio de aceptación | Dónde verlo |
+| --- | --- |
+| 1. Crear notificación válida | `/refugios/:id/notificaciones` → en el formulario elegir "Canal" (EMAIL, SMS o PUSH) y escribir el "Mensaje" → "Enviar notificación"; aparece en la lista del refugio |
+| 2. Canal inválido | Enviar el formulario sin un canal válido → mensaje de error bajo el campo "Canal"; no se registra nada |
+| 3. Mensaje obligatorio | Dejar "Mensaje" vacío o solo con espacios y enviar → mensaje de error bajo el campo; no se registra nada |
+| 4. Refugio inexistente | `/refugios/9999/notificaciones` (consultar) o intentar crear en un refugio inexistente → "Refugio no encontrado." |
+| 5. Consultar notificaciones | La lista muestra todas las del refugio; "Ver detalle" (junto al badge de cada tarjeta) → `/refugios/:id/notificaciones/:notificationId`; si no existe, mensaje de notificación no encontrada |
+| 6. Notificación de otro refugio | Abrir, editar o borrar una notificación con el id de otro refugio (el seed imprime la URL) → "La notificación pertenece a otro refugio." |
+| 7. Editar notificación | "Editar" en una notificación → cambiar canal o mensaje con valores válidos → "Guardar cambios"; se conserva la fecha; con valores inválidos se rechaza el cambio |
+| 8. Borrar notificación | "Eliminar" en una notificación propia → desaparece de la lista del refugio |
+
+**Notas para quien revise**
+
+- El back usa `/shelters/{shelterId}/notifications`; las rutas del front son `/refugios/:id/notificaciones`. Campos: `id`, `message`, `date`, `channel`, `shelter`.
+- El back no asigna `date` y el PUT la borra: el front la envía al crear (hoy a las 12:00 UTC) y la conserva al editar.
+- El back acepta mensajes con solo espacios; el front los rechaza. El back valida el mensaje antes que el canal.
+- Con un refugio inexistente el back responde 404 al listar o consultar, pero 412 ("Shelter is not valid") al crear; el front muestra "Refugio no encontrado." en ambos casos.
+- Una notificación de otro refugio da 412 con "not associated to the shelter"; el front la traduce.
+- El back responde en inglés y el front traduce los mensajes conocidos.
+- "Ver detalle" es un enlace discreto junto al badge porque el mockup no lo incluye. El detalle aún no muestra la fecha (falta revisar `utils/eventDates.js` para formatearla bien).
+
 ### HU10 — Gestionar refugios
 
 Como administrador quiero registrar y gestionar refugios con nombre y ciudad para mantener actualizado el listado de refugios aliados.

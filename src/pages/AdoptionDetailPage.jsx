@@ -4,6 +4,7 @@ import AdoptionStatusBadge from '../components/AdoptionStatusBadge';
 import AdoptionStatusForm from '../components/AdoptionStatusForm';
 import AlertMessage from '../components/AlertMessage';
 import Loader from '../components/Loader';
+import TrialCohabitationPanel from '../components/TrialCohabitationPanel';
 import useAdoption from '../hooks/useAdoption';
 import { isNotFound } from '../services/apiError';
 import { buildStatusPayload } from '../services/adoptionMapper';
@@ -102,6 +103,7 @@ export default function AdoptionDetailPage() {
             <h2 className="adoption-actions__title">Seguimiento</h2>
             <AdoptionStatusForm currentStatus={visibleAdoption.status} onSave={handleSaveStatus} />
           </div>
+          <TrialCohabitationPanel adoptionId={id} />
         </>
       )}
 

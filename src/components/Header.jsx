@@ -3,7 +3,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 // Las secciones sin `to` siguen deshabilitadas hasta que se implemente su historia.
 const navItems = [
   { label: 'Mascotas', to: '/mascotas' },
-  { label: 'Adoptantes' },
+  { label: 'Adoptantes', to: '/adoptantes', notActive: /^\/adoptantes\/[^/]+\/resenas/ },
   { label: 'Adopciones', to: '/adopciones' },
   { label: 'Mis reseñas', to: '/mis-resenas', alsoActive: /^\/adoptantes\/[^/]+\/resenas/ },
   { label: 'Mis mensajes', to: '/mis-mensajes', alsoActive: /^\/adoptantes\/[^/]+\/mensajes/ },
@@ -29,13 +29,13 @@ export default function Header() {
       </div>
 
       <nav className="app-nav" aria-label="Principal">
-        {navItems.map(({ label, to, alsoActive }) =>
+        {navItems.map(({ label, to, alsoActive, notActive }) =>
           to ? (
             <NavLink
               key={label}
               to={to}
               className={({ isActive }) =>
-                `app-nav__link${isActive || alsoActive?.test(pathname) ? ' app-nav__link--active' : ''}`
+                `app-nav__link${(isActive && !notActive?.test(pathname)) || alsoActive?.test(pathname) ? ' app-nav__link--active' : ''}`
               }
             >
               {label}
