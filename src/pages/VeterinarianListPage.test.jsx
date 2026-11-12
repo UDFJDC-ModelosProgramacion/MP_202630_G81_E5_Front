@@ -5,7 +5,10 @@ import { MemoryRouter } from 'react-router-dom';
 import { getVeterinarians } from '../services/veterinarianService';
 import VeterinarianListPage from './VeterinarianListPage';
 
-vi.mock('../services/veterinarianService', () => ({ getVeterinarians: vi.fn() }));
+vi.mock('../services/veterinarianService', () => ({
+  getVeterinarians: vi.fn(),
+  deleteVeterinarian: vi.fn(),
+}));
 
 const veterinarians = [
   {
