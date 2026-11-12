@@ -1,0 +1,1 @@
+export const SPECIES_OPTIONS = ['Perro', 'Gato', 'Conejo', 'Ave', 'Otro'];
