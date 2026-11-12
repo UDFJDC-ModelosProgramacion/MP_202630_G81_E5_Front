@@ -30,6 +30,10 @@ import ShelterEventDetailPage from '../pages/ShelterEventDetailPage';
 import ShelterEventsPage from '../pages/ShelterEventsPage';
 import ShelterListPage from '../pages/ShelterListPage';
 import ShelterVideosPage from '../pages/ShelterVideosPage';
+import VeterinarianCreatePage from '../pages/VeterinarianCreatePage';
+import VeterinarianDetailPage from '../pages/VeterinarianDetailPage';
+import VeterinarianEditPage from '../pages/VeterinarianEditPage';
+import VeterinarianListPage from '../pages/VeterinarianListPage';
 import VideoDetailPage from '../pages/VideoDetailPage';
 import { PHOTO_OWNER } from '../utils/photoOwners';
 
@@ -75,6 +79,10 @@ export default function AppRoutes() {
         <Route path="/refugios/:id/videos/:videoId" element={<VideoDetailPage />} />
         <Route path="/refugios/:id/notificaciones" element={<NotificationListPage />} />
         <Route path="/refugios/:id/notificaciones/:notificationId" element={<NotificationDetailPage />} />
+        <Route path="/veterinarios" element={<VeterinarianListPage />} />
+        <Route path="/veterinarios/nuevo" element={<VeterinarianCreatePage />} />
+        <Route path="/veterinarios/:id" element={<VeterinarianDetailPage />} />
+        <Route path="/veterinarios/:id/editar" element={<VeterinarianEditPage />} />
       </Route>
     </Routes>
   );
