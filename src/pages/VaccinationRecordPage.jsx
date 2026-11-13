@@ -1,24 +1,12 @@
 import { Link, useLocation, useParams } from 'react-router-dom';
 import AlertMessage from '../components/AlertMessage';
 import Loader from '../components/Loader';
+import VaccinationRecordBreadcrumb from '../components/VaccinationRecordBreadcrumb';
 import VaccinationRecordCard from '../components/VaccinationRecordCard';
+import VaccinationRecordMissing from '../components/VaccinationRecordMissing';
 import usePet from '../hooks/usePet';
 import useVaccinationRecord from '../hooks/useVaccinationRecord';
-import {
-  PET_NOT_FOUND_MESSAGE,
-  VACCINATION_RECORD_NOT_FOUND_MESSAGE,
-} from '../utils/vaccinationRecordMessages';
-
-function MissingRecord({ pet }) {
-  return (
-    <>
-      <AlertMessage>{VACCINATION_RECORD_NOT_FOUND_MESSAGE}</AlertMessage>
-      <Link to={`/mascotas/${pet.id}/carnet/nuevo`} className="btn-brand">
-        Registrar carnet
-      </Link>
-    </>
-  );
-}
+import { PET_NOT_FOUND_MESSAGE } from '../utils/vaccinationRecordMessages';
 
 function RecordView({ pet, record, error, notFound, message }) {
   return (
@@ -39,7 +27,7 @@ function RecordView({ pet, record, error, notFound, message }) {
 
       {message && <AlertMessage variant="success">{message}</AlertMessage>}
       {record && <VaccinationRecordCard pet={pet} record={record} />}
-      {!record && notFound && <MissingRecord pet={pet} />}
+      {!record && notFound && <VaccinationRecordMissing pet={pet} />}
       {!record && !notFound && error && <AlertMessage>{error}</AlertMessage>}
     </>
   );
@@ -55,16 +43,7 @@ export default function VaccinationRecordPage() {
 
   return (
     <section>
-      <nav className="breadcrumb-nav" aria-label="Ruta de navegación">
-        <Link to="/mascotas">Mascotas</Link>
-        {pet && (
-          <>
-            {' / '}
-            <Link to={`/mascotas/${pet.id}`}>{pet.name}</Link>
-          </>
-        )}
-        {' / Carnet de vacunación'}
-      </nav>
+      <VaccinationRecordBreadcrumb pet={pet} />
 
       {loading && <Loader label="Cargando carnet..." />}
 
