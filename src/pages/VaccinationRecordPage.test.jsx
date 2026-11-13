@@ -7,7 +7,11 @@ import { getVaccinationRecord } from '../services/vaccinationRecordService';
 import VaccinationRecordPage from './VaccinationRecordPage';
 
 vi.mock('../services/petService', () => ({ getPet: vi.fn() }));
-vi.mock('../services/vaccinationRecordService', () => ({ getVaccinationRecord: vi.fn() }));
+
+vi.mock('../services/vaccinationRecordService', () => ({
+  getVaccinationRecord: vi.fn(),
+ deleteVaccinationRecord: vi.fn(),
+}));
 
 const pet = { id: 1, name: 'Luna', species: 'Perro' };
 const record = {

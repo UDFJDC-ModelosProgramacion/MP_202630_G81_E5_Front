@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { getVaccinationRecord } from '../services/vaccinationRecordService';
 import { getErrorMessage, isNotFound } from '../services/apiError';
 
@@ -31,5 +31,9 @@ export default function useVaccinationRecord(petId) {
     };
   }, [petId]);
 
-  return state;
+  const clearRecord = useCallback(() => {
+    setState({ record: null, loading: false, error: null, notFound: true });
+  }, []);
+
+  return { ...state, clearRecord };
 }

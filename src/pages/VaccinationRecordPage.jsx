@@ -6,9 +6,12 @@ import VaccinationRecordCard from '../components/VaccinationRecordCard';
 import VaccinationRecordMissing from '../components/VaccinationRecordMissing';
 import usePet from '../hooks/usePet';
 import useVaccinationRecord from '../hooks/useVaccinationRecord';
+import useVaccinationRecordDelete from '../hooks/useVaccinationRecordDelete';
 import { PET_NOT_FOUND_MESSAGE } from '../utils/vaccinationRecordMessages';
 
-function RecordView({ pet, record, error, notFound, message }) {
+function RecordView({ pet, recordState, feedback, deleting, onDelete }) {
+  const { record, error, notFound } = recordState;
+
   return (
     <>
       <div className="page-header">
@@ -25,9 +28,16 @@ function RecordView({ pet, record, error, notFound, message }) {
         )}
       </div>
 
-      {message && <AlertMessage variant="success">{message}</AlertMessage>}
-      {record && <VaccinationRecordCard pet={pet} record={record} />}
-      {!record && notFound && <VaccinationRecordMissing pet={pet} />}
+      {feedback && <AlertMessage variant={feedback.type}>{feedback.message}</AlertMessage>}
+      {record && (
+        <VaccinationRecordCard
+          pet={pet}
+          record={record}
+          onDelete={onDelete}
+          deleting={deleting}
+        />
+      )}
+      {!record && notFound && <VaccinationRecordMissing pet={pet} showAlert={!feedback} />}
       {!record && !notFound && error && <AlertMessage>{error}</AlertMessage>}
     </>
   );
@@ -39,7 +49,14 @@ export default function VaccinationRecordPage() {
   const petState = usePet(id);
   const recordState = useVaccinationRecord(id);
   const { pet } = petState;
+  const { deleting, feedback: deleteFeedback, remove } = useVaccinationRecordDelete(
+    pet,
+    recordState.clearRecord,
+  );
   const loading = petState.loading || recordState.loading;
+  const routeMessage = location.state?.message;
+  const feedback =
+    deleteFeedback ?? (routeMessage ? { type: 'success', message: routeMessage } : null);
 
   return (
     <section>
@@ -54,10 +71,10 @@ export default function VaccinationRecordPage() {
       {!loading && pet && (
         <RecordView
           pet={pet}
-          record={recordState.record}
-          error={recordState.error}
-          notFound={recordState.notFound}
-          message={location.state?.message}
+          recordState={recordState}
+          feedback={feedback}
+          deleting={deleting}
+          onDelete={remove}
         />
       )}
     </section>
