@@ -368,6 +368,29 @@ Como administrador de refugio quiero registrar y administrar veterinarios con no
 | 5. Editar veterinario | "Editar" → `/veterinarios/:id/editar` → "Guardar cambios"; el refugio queda bloqueado y se conserva; datos obligatorios vacíos se rechazan; si no existe (`/veterinarios/9999/editar`), "Veterinario no encontrado." |
 | 6. Borrar veterinario | "Eliminar" (con confirmación) en un veterinario sin asociaciones: desaparece del listado; si tiene eventos de vida o adopciones → "No se puede eliminar a X: tiene eventos de vida asociados." (o "adopciones asociadas"); si ya no existe → "Veterinario no encontrado." |
 
+### HU14 — Gestionar carnet de vacunación
+
+Como administrador de refugio quiero registrar el carnet de vacunación de una mascota con las vacunas aplicadas para llevar el control de su salud y de su próxima vacuna.
+
+**Cómo visualizarla**
+
+1. Levanta el back-end y carga datos de prueba (la base se borra al reiniciar el back; los scripts se ejecutan una sola vez por arranque):
+   ```powershell
+   .\infra\seed-data.ps1
+   .\infra\seed-vaccination.ps1
+   ```
+   El primero crea las mascotas; el segundo registra un carnet a la primera mascota (Rabia, Parvovirus y Moquillo, próxima vacunación el 2027-08-01), deja a las demás sin carnet e imprime las URLs de ambos casos. Si tu back corre en otro puerto, agrega `-ApiUrl "http://localhost:8999/api"`. Si PowerShell bloquea el script: `powershell -ExecutionPolicy Bypass -File .\infra\seed-vaccination.ps1`.
+2. Ejecuta `npm run dev`, abre `http://localhost:5173/mascotas`, entra al detalle de una mascota y pulsa "Carnet de vacunación" (o abre directamente `/mascotas/:id/carnet`).
+
+| Criterio de aceptación | Dónde verlo |
+| --- | --- |
+| 1. Crear carnet válido | En una mascota sin carnet, `/mascotas/:id/carnet` → "Registrar carnet" (`/mascotas/:id/carnet/nuevo`) → escribir las vacunas separadas por comas (la próxima fecha es opcional) → "Guardar carnet"; aviso verde y se muestra el carnet |
+| 2. Datos obligatorios | "Guardar carnet" o "Guardar cambios" con las vacunas vacías (o solo espacios y comas) → "Indica al menos una vacuna aplicada." |
+| 3. Mascota inexistente | `/mascotas/9999/carnet`, `/mascotas/9999/carnet/nuevo` y `/mascotas/9999/carnet/editar` → "Mascota no encontrada."; no se muestra el formulario. El rechazo al eliminar si la mascota desaparece a mitad de camino está cubierto por pruebas |
+| 4. Un carnet por mascota | En una mascota que ya tiene carnet, abrir `/mascotas/:id/carnet/nuevo` y guardar → "Esta mascota ya tiene un carnet de vacunación." |
+| 5. Consultar carnet | `/mascotas/:id/carnet` muestra las vacunas como etiquetas, la próxima vacunación y la mascota; si la mascota no tiene carnet → "Carnet de vacunación no encontrado." con el botón "Registrar carnet" |
+| 6. Editar carnet | "Editar carnet" → `/mascotas/:id/carnet/editar` → "Guardar cambios"; la mascota queda bloqueada y se conserva; las vacunas vacías se rechazan; si no hay carnet → "Carnet de vacunación no encontrado." |
+| 7. Borrar carnet | "Eliminar carnet" (con confirmación) → "Carnet eliminado correctamente." y se ofrece "Registrar carnet"; si el carnet ya no existe → "Carnet de vacunación no encontrado." |
 
 ## Pruebas
 
