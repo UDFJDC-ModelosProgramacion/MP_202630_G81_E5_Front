@@ -346,6 +346,29 @@ Como adoptante quiero enviar y gestionar mis mensajes para comunicarme con el re
 | 6. Mensaje ya enviado no se edita | "Editar" en una tarjeta → el panel pasa a "Editar mensaje" con el contenido cargado → "Guardar cambios" → aviso rojo "No se puede editar un mensaje que ya fue enviado."; el contenido se conserva y "Cancelar" vuelve al formulario nuevo |
 | 7. Borrar mensaje propio | "Eliminar" (con confirmación) en una tarjeta: desaparece de la lista y aparece "Mensaje eliminado correctamente." |
 
+### HU13 — Gestionar veterinarios
+
+Como administrador de refugio quiero registrar y administrar veterinarios con nombre, correo y especialidad válidos para asignarlos a adopciones y eventos de vida de las mascotas.
+
+**Cómo visualizarla**
+
+1. Levanta el back-end y carga datos de prueba (la base se borra al reiniciar el back; el script se ejecuta una sola vez por arranque):
+   ```powershell
+   .\infra\seed-veterinarian.ps1
+   ```
+   Crea (o reutiliza) "Refugio Adopciones" y registra 4 veterinarios: tres asignados a ese refugio y uno sin refugio. Si tu back corre en otro puerto, agrega `-ApiUrl "http://localhost:8999/api"`. Si PowerShell bloquea el script: `powershell -ExecutionPolicy Bypass -File .\infra\seed-veterinarian.ps1`.
+2. Ejecuta `npm run dev` y abre `http://localhost:5173/veterinarios` (el menú resalta "Refugios" en esta sección).
+
+| Criterio de aceptación | Dónde verlo |
+| --- | --- |
+| 1. Crear veterinario válido | `/veterinarios/nuevo` → nombre, correo y especialidad (refugio, teléfono y disponibilidad son opcionales) → "Registrar veterinario"; aviso verde y aparece en el listado |
+| 2. Datos obligatorios | Enviar el formulario vacío → "El nombre es obligatorio.", "El correo es obligatorio." y "La especialidad es obligatoria."; lo mismo al guardar un veterinario editado con alguno de esos campos vacío |
+| 3. Refugio inexistente | El selector solo ofrece refugios existentes; si el refugio se elimina antes de enviar, el back rechaza la operación y su mensaje se muestra en el banner rojo del formulario (cubierto por pruebas) |
+| 4. Consultar veterinarios | `/veterinarios` (listado con especialidad, refugio y disponibilidad) y clic en el nombre → `/veterinarios/:id` con sus datos y eventos de vida; si no existe (`/veterinarios/9999`), "Veterinario no encontrado." |
+| 5. Editar veterinario | "Editar" → `/veterinarios/:id/editar` → "Guardar cambios"; el refugio queda bloqueado y se conserva; datos obligatorios vacíos se rechazan; si no existe (`/veterinarios/9999/editar`), "Veterinario no encontrado." |
+| 6. Borrar veterinario | "Eliminar" (con confirmación) en un veterinario sin asociaciones: desaparece del listado; si tiene eventos de vida o adopciones → "No se puede eliminar a X: tiene eventos de vida asociados." (o "adopciones asociadas"); si ya no existe → "Veterinario no encontrado." |
+
+
 ## Pruebas
 
 ```powershell
