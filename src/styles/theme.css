@@ -537,3 +537,27 @@ select.form-control-brand {
 .veterinarian-events__type { font-size: 18px; font-weight: 800; margin-right: 12px; }
 .veterinarian-events__meta { font-size: 16px; color: var(--color-muted); }
 .veterinarian-events__description { margin: 8px 0 0; font-size: 17px; overflow-wrap: anywhere; }
+
+
+/* ===== Carnet de vacunación (HU14) ===== */
+.vaccination-card { max-width: 720px; }
+.vaccination-card__title { margin: 0 0 22px; font-size: 24px; font-weight: 800; }
+.vaccination-card__label { margin: 0 0 12px; font-size: 15px; font-weight: 700; color: var(--color-muted); }
+.vaccination-chips { list-style: none; margin: 0 0 24px; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+.vaccination-chips__item {
+  padding: 8px 18px; border-radius: 999px;
+  background: var(--color-primary-soft); color: var(--color-primary);
+ font-size: 16px; font-weight: 700;
+}
+.vaccination-card__facts {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 22px 28px;
+  margin: 0 0 20px; padding-top: 24px; border-top: 1px solid var(--color-border);
+}
+.vaccination-card__facts dt { font-size: 15px; font-weight: 700; color: var(--color-muted); }
+.vaccination-card__facts dd { margin: 4px 0 0; font-size: 18px; font-weight: 700; }
+@media (max-width: 720px) {
+  .vaccination-card__facts { grid-template-columns: 1fr; }
+}
+
+.vaccination-form__vaccines { min-height: 120px; padding: 12px 18px; resize: vertical; }
+.vaccination-form__vaccines.form-control-brand--invalid { padding: 11px 17px; }

@@ -62,6 +62,13 @@ export default function PetDetailPage() {
             Fotos
           </Link>
         )}
+
+        {pet && (
+         <Link to={`/mascotas/${pet.id}/carnet`} className="btn-outline-brand">
+            Carnet de vacunación
+         </Link>
+       )}
+
         {pet && (
           <Link to={`/mascotas/${pet.id}/editar`} className="btn-brand">
             Editar
