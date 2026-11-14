@@ -357,7 +357,7 @@ Como administrador de refugio quiero registrar y administrar veterinarios con no
    .\infra\seed-veterinarian.ps1
    ```
    Crea (o reutiliza) "Refugio Adopciones" y registra 4 veterinarios: tres asignados a ese refugio y uno sin refugio. Si tu back corre en otro puerto, agrega `-ApiUrl "http://localhost:8999/api"`. Si PowerShell bloquea el script: `powershell -ExecutionPolicy Bypass -File .\infra\seed-veterinarian.ps1`.
-2. Ejecuta `npm run dev` y abre `http://localhost:5173/veterinarios` (el menú resalta "Refugios" en esta sección).
+2. Ejecuta `npm run dev` y pulsa "Veterinarios" en el menú principal (o abre `http://localhost:5173/veterinarios`).
 
 | Criterio de aceptación | Dónde verlo |
 | --- | --- |
@@ -391,6 +391,32 @@ Como administrador de refugio quiero registrar el carnet de vacunación de una m
 | 5. Consultar carnet | `/mascotas/:id/carnet` muestra las vacunas como etiquetas, la próxima vacunación y la mascota; si la mascota no tiene carnet → "Carnet de vacunación no encontrado." con el botón "Registrar carnet" |
 | 6. Editar carnet | "Editar carnet" → `/mascotas/:id/carnet/editar` → "Guardar cambios"; la mascota queda bloqueada y se conserva; las vacunas vacías se rechazan; si no hay carnet → "Carnet de vacunación no encontrado." |
 | 7. Borrar carnet | "Eliminar carnet" (con confirmación) → "Carnet eliminado correctamente." y se ofrece "Registrar carnet"; si el carnet ya no existe → "Carnet de vacunación no encontrado." |
+
+
+### HU15 — Gestionar eventos de vida
+
+Como administrador de refugio quiero registrar eventos de vida de una mascota con tipo y fecha válidos, y opcionalmente el veterinario que los atendió, para mantener su historial.
+
+**Cómo visualizarla**
+
+1. Levanta el back-end y carga datos de prueba (la base se borra al reiniciar el back; los scripts se ejecutan una sola vez por arranque):
+   ```powershell
+   .\infra\seed-data.ps1
+   .\infra\seed-veterinarian.ps1
+   .\infra\seed-lifeevents.ps1
+   ```
+   El tercero registra tres eventos a la primera mascota (Vacunación el 10 may 2026, Control el 2 mar 2026 y Cirugía el 15 ene 2026), asignados a los veterinarios si existen, deja a las demás sin eventos e imprime las URLs de cada caso, incluida la de un evento de otra mascota. Si tu back corre en otro puerto, agrega `-ApiUrl "http://localhost:8999/api"`. Si PowerShell bloquea el script: `powershell -ExecutionPolicy Bypass -File .\infra\seed-lifeevents.ps1`.
+2. Ejecuta `npm run dev`, abre `http://localhost:5173/mascotas`, entra al detalle de una mascota y pulsa "Eventos de vida" (o abre directamente `/mascotas/:id/eventos-de-vida`).
+
+| Criterio de aceptación | Dónde verlo |
+| --- | --- |
+| 1. Crear evento válido | `/mascotas/:id/eventos-de-vida` → "+ Registrar evento" (`/mascotas/:id/eventos-de-vida/nuevo`) → tipo y fecha (descripción y veterinario son opcionales) → "Registrar evento"; aviso verde y el evento aparece en la lista |
+| 2. Datos obligatorios | Registrar o guardar un evento sin tipo o sin fecha → "El tipo es obligatorio." y "La fecha es obligatoria." |
+| 3. Mascota o veterinario inexistente | `/mascotas/9999/eventos-de-vida` (y sus rutas `nuevo`, `:eventId` y `:eventId/editar`) → "Mascota no encontrada."; si el veterinario desaparece antes de guardar, el banner muestra "Veterinario no encontrado." (cubierto por pruebas) |
+| 4. Consultar eventos | La lista muestra fecha, tipo, descripción y veterinario, ordenados del más reciente al más antiguo; clic en la fecha → `/mascotas/:id/eventos-de-vida/:eventId`; si el evento no existe (`.../9999`) → "Evento de vida no encontrado." |
+| 5. Evento de otra mascota | Abrir la URL "Evento de otra mascota" que imprime el script (y su `/editar`) → "Este evento no pertenece a la mascota."; guardar o eliminar desde otra mascota está cubierto por pruebas |
+| 6. Editar evento | "Editar" → `/mascotas/:id/eventos-de-vida/:eventId/editar` → "Guardar cambios"; la mascota queda bloqueada y se conserva; el veterinario se puede cambiar o quitar; tipo o fecha vacíos se rechazan |
+| 7. Borrar evento | "Eliminar" (con confirmación) → "Evento eliminado correctamente." y desaparece de la lista; si ya no existe → "Evento de vida no encontrado." |
 
 ## Pruebas
 

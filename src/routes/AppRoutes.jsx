@@ -21,6 +21,10 @@ import PetListPage from '../pages/PetListPage';
 import VaccinationRecordCreatePage from '../pages/VaccinationRecordCreatePage';
 import VaccinationRecordEditPage from '../pages/VaccinationRecordEditPage';
 import VaccinationRecordPage from '../pages/VaccinationRecordPage';
+import LifeEventCreatePage from '../pages/LifeEventCreatePage';
+import LifeEventDetailPage from '../pages/LifeEventDetailPage';
+import LifeEventEditPage from '../pages/LifeEventEditPage';
+import LifeEventListPage from '../pages/LifeEventListPage';
 import PhotoDetailPage from '../pages/PhotoDetailPage';
 import PhotoListPage from '../pages/PhotoListPage';
 import ReturnRecordPage from '../pages/ReturnRecordPage';
@@ -53,6 +57,10 @@ export default function AppRoutes() {
         <Route path="/mascotas/:id/carnet" element={<VaccinationRecordPage />} />
         <Route path="/mascotas/:id/carnet/nuevo" element={<VaccinationRecordCreatePage />} />
         <Route path="/mascotas/:id/carnet/editar" element={<VaccinationRecordEditPage />} />
+        <Route path="/mascotas/:id/eventos-de-vida" element={<LifeEventListPage />} />
+        <Route path="/mascotas/:id/eventos-de-vida/nuevo" element={<LifeEventCreatePage />} />
+        <Route path="/mascotas/:id/eventos-de-vida/:eventId" element={<LifeEventDetailPage />} />
+        <Route path="/mascotas/:id/eventos-de-vida/:eventId/editar" element={<LifeEventEditPage />} />
         <Route path="/mascotas/:id/fotos" element={<PhotoListPage owner={PHOTO_OWNER.PET} />} />
         <Route path="/mascotas/:id/fotos/:photoId" element={<PhotoDetailPage owner={PHOTO_OWNER.PET} />} />
         <Route path="/adopciones" element={<AdoptionListPage />} />
