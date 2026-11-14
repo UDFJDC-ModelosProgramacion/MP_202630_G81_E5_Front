@@ -1,4 +1,4 @@
-import { NavLink, useLocation } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 
 // Las secciones sin `to` siguen deshabilitadas hasta que se implemente su historia.
 const navItems = [
@@ -16,7 +16,7 @@ export default function Header() {
 
   return (
     <header className="app-header">
-      <div className="app-brand">
+      <Link to="/" className="app-brand">
         <div className="app-brand__logo">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff" aria-hidden="true">
             <circle cx="5" cy="11" r="2.2" />
@@ -27,8 +27,7 @@ export default function Header() {
           </svg>
         </div>
         <span className="app-brand__name">AdoptaYa</span>
-      </div>
-
+      </Link>
       <nav className="app-nav" aria-label="Principal">
         {navItems.map(({ label, to, end, alsoActive, notActive }) =>
           to ? (
