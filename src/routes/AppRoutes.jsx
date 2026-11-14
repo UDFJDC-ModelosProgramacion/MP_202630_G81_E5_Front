@@ -1,5 +1,6 @@
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout';
+import HomePage from '../pages/HomePage';
 import AdopterCreatePage from '../pages/AdopterCreatePage';
 import AdopterDetailPage from '../pages/AdopterDetailPage';
 import AdopterEditPage from '../pages/AdopterEditPage';
@@ -44,7 +45,7 @@ export default function AppRoutes() {
   return (
     <Routes>
       <Route element={<MainLayout />}>
-        <Route path="/" element={<Navigate to="/mascotas" replace />} />
+        <Route path="/" element={<HomePage />} />
         <Route path="/mascotas" element={<PetListPage />} />
         <Route path="/mascotas/nueva" element={<PetCreatePage />} />
         <Route path="/mascotas/:id" element={<PetDetailPage />} />

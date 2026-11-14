@@ -27,5 +27,24 @@ describe('Header', () => {
     expect(link.getAttribute('href')).toBe('/refugios');
     expect(link.className).toContain('app-nav__link--active');
   });
+  
+  it('resalta Inicio solo en la página principal', () => {
+    render(
+      <MemoryRouter initialEntries={['/']}>
+        <Header />
+      </MemoryRouter>,
+    );
+    expect(screen.getByRole('link', { name: 'Inicio' }).className).toContain('app-nav__link--active');
+    expect(screen.getByRole('link', { name: 'Mascotas' }).className).not.toContain('app-nav__link--active');
+  });
+
+  it('no resalta Inicio en otras secciones', () => {
+    render(
+      <MemoryRouter initialEntries={['/mascotas']}>
+        <Header />
+      </MemoryRouter>,
+    );
+    expect(screen.getByRole('link', { name: 'Inicio' }).className).not.toContain('app-nav__link--active');
+  });
 });
 
