@@ -4,10 +4,21 @@ import LifeEventBreadcrumb from '../components/LifeEventBreadcrumb';
 import LifeEventTable from '../components/LifeEventTable';
 import Loader from '../components/Loader';
 import useLifeEvents from '../hooks/useLifeEvents';
+import useListDelete from '../hooks/useListDelete';
 import usePet from '../hooks/usePet';
+import { isNotFound } from '../services/apiError';
+import { deleteLifeEvent } from '../services/lifeEventService';
+import { formatEventDate } from '../utils/eventDates';
+import {
+  getLifeEventErrorMessage,
+  LIFE_EVENT_NOT_FOUND_MESSAGE,
+} from '../utils/lifeEventMessages';
 import { PET_NOT_FOUND_MESSAGE } from '../utils/vaccinationRecordMessages';
 
-function EventsView({ pet, eventsState, message }) {
+const isEventGone = (error) =>
+  isNotFound(error) && getLifeEventErrorMessage(error) === LIFE_EVENT_NOT_FOUND_MESSAGE;
+
+function EventsView({ pet, eventsState, feedback, deletingId, onDelete }) {
   const { events, error, reload } = eventsState;
 
   return (
@@ -22,7 +33,7 @@ function EventsView({ pet, eventsState, message }) {
         </Link>
       </div>
 
-      {message && <AlertMessage variant="success">{message}</AlertMessage>}
+      {feedback && <AlertMessage variant={feedback.type}>{feedback.message}</AlertMessage>}
 
       {error && (
         <>
@@ -37,7 +48,14 @@ function EventsView({ pet, eventsState, message }) {
         <p className="empty-state">Esta mascota aún no tiene eventos de vida registrados.</p>
       )}
 
-      {!error && events.length > 0 && <LifeEventTable petId={pet.id} events={events} />}
+      {!error && events.length > 0 && (
+        <LifeEventTable
+          petId={pet.id}
+          events={events}
+          onDelete={onDelete}
+          deletingId={deletingId}
+        />
+      )}
     </>
   );
 }
@@ -49,6 +67,18 @@ export default function LifeEventListPage() {
   const eventsState = useLifeEvents(id);
   const { pet } = petState;
   const loading = petState.loading || eventsState.loading;
+  const { deletingId, feedback, handleDelete } = useListDelete({
+    initialFeedback: location.state?.message
+      ? { type: 'success', message: location.state.message }
+      : null,
+    deleteItem: (lifeEvent) => deleteLifeEvent(id, lifeEvent.id),
+    onRemoved: (lifeEvent) => eventsState.removeEvent(lifeEvent.id),
+    confirmMessage: (lifeEvent) =>
+      `¿Eliminar el evento de ${lifeEvent.type} del ${formatEventDate(lifeEvent.date)}? Esta acción no se puede deshacer.`,
+    successMessage: () => 'Evento eliminado correctamente.',
+    getErrorMessage: getLifeEventErrorMessage,
+    isGone: isEventGone,
+  });
 
   return (
     <section>
@@ -61,7 +91,13 @@ export default function LifeEventListPage() {
       )}
 
       {!loading && pet && (
-        <EventsView pet={pet} eventsState={eventsState} message={location.state?.message} />
+        <EventsView
+          pet={pet}
+          eventsState={eventsState}
+          feedback={feedback}
+          deletingId={deletingId}
+          onDelete={handleDelete}
+        />
       )}
     </section>
   );

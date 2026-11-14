@@ -1,47 +1,26 @@
-import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import AlertMessage from '../components/AlertMessage';
 import Loader from '../components/Loader';
 import VeterinarianTable from '../components/VeterinarianTable';
+import useListDelete from '../hooks/useListDelete';
 import useVeterinarians from '../hooks/useVeterinarians';
-import { isNotFound } from '../services/apiError';
 import { deleteVeterinarian } from '../services/veterinarianService';
 import { getVeterinarianDeleteErrorMessage } from '../utils/veterinarianMessages';
 
 export default function VeterinarianListPage() {
   const { veterinarians, loading, error, reload, removeVeterinarian } = useVeterinarians();
   const location = useLocation();
-  const [feedback, setFeedback] = useState(() =>
-    location.state?.message ? { type: 'success', message: location.state.message } : null,
-  );
-  const [deletingId, setDeletingId] = useState(null);
-
-  const handleDelete = async (veterinarian) => {
-    if (
-      !window.confirm(`¿Eliminar a ${veterinarian.name}? Esta acción no se puede deshacer.`)
-    ) {
-      return;
-    }
-
-    setFeedback(null);
-    setDeletingId(veterinarian.id);
-    try {
-      await deleteVeterinarian(veterinarian.id);
-      removeVeterinarian(veterinarian.id);
-      setFeedback({
-        type: 'success',
-        message: `Veterinario ${veterinarian.name} eliminado correctamente.`,
-      });
-    } catch (deleteError) {
-      if (isNotFound(deleteError)) removeVeterinarian(veterinarian.id);
-      setFeedback({
-        type: 'error',
-        message: getVeterinarianDeleteErrorMessage(deleteError, veterinarian),
-      });
-    } finally {
-      setDeletingId(null);
-    }
-  };
+  const { deletingId, feedback, handleDelete } = useListDelete({
+    initialFeedback: location.state?.message
+      ? { type: 'success', message: location.state.message }
+      : null,
+    deleteItem: (veterinarian) => deleteVeterinarian(veterinarian.id),
+    onRemoved: (veterinarian) => removeVeterinarian(veterinarian.id),
+    confirmMessage: (veterinarian) =>
+      `¿Eliminar a ${veterinarian.name}? Esta acción no se puede deshacer.`,
+    successMessage: (veterinarian) => `Veterinario ${veterinarian.name} eliminado correctamente.`,
+    getErrorMessage: getVeterinarianDeleteErrorMessage,
+  });
 
   return (
     <section>
