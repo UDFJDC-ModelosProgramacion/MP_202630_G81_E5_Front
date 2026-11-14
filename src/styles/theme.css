@@ -561,3 +561,23 @@ select.form-control-brand {
 
 .vaccination-form__vaccines { min-height: 120px; padding: 12px 18px; resize: vertical; }
 .vaccination-form__vaccines.form-control-brand--invalid { padding: 11px 17px; }
+
+/* ===== Eventos de vida (HU15) ===== */
+.life-event-table { min-width: 900px; }
+.life-event-table th:nth-child(1) { width: 15%; }
+.life-event-table th:nth-child(2) { width: 15%; }
+.life-event-table th:nth-child(3) { width: 30%; }
+.life-event-table th:nth-child(4) { width: 22%; }
+.life-event-table th:nth-child(5) { width: 18%; }
+.life-event-table td { overflow-wrap: anywhere; }
+
+.life-event-badge {
+  display: inline-block; padding: 4px 12px; border-radius: 999px;
+  font-size: 14px; font-weight: 700;
+  background: var(--color-bg); color: var(--color-muted);
+}
+.life-event-badge--vaccination { background: var(--color-success-soft); color: var(--color-success); }
+.life-event-badge--checkup { background: var(--color-info-soft); color: var(--color-info); }
+.life-event-badge--surgery { background: #fdf3da; color: #8a5a00; }
+
+.life-event-detail__wide { grid-column: 1 / -1; overflow-wrap: anywhere; }
