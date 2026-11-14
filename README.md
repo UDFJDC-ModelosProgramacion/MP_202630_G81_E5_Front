@@ -357,7 +357,7 @@ Como administrador de refugio quiero registrar y administrar veterinarios con no
    .\infra\seed-veterinarian.ps1
    ```
    Crea (o reutiliza) "Refugio Adopciones" y registra 4 veterinarios: tres asignados a ese refugio y uno sin refugio. Si tu back corre en otro puerto, agrega `-ApiUrl "http://localhost:8999/api"`. Si PowerShell bloquea el script: `powershell -ExecutionPolicy Bypass -File .\infra\seed-veterinarian.ps1`.
-2. Ejecuta `npm run dev` y abre `http://localhost:5173/veterinarios` (el menú resalta "Refugios" en esta sección).
+2. Ejecuta `npm run dev` y pulsa "Veterinarios" en el menú principal (o abre `http://localhost:5173/veterinarios`).
 
 | Criterio de aceptación | Dónde verlo |
 | --- | --- |
