@@ -1,66 +1,24 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import AlertMessage from './AlertMessage';
-import FormField from './FormField';
+import useEntityForm from '../hooks/useEntityForm';
 import { getVaccinationRecordErrorMessage } from '../utils/vaccinationRecordMessages';
 import { validateVaccinationRecord } from '../utils/vaccinationRecordValidation';
+import AlertMessage from './AlertMessage';
+import FormField from './FormField';
+import LockedPetField from './LockedPetField';
 
 export default function VaccinationRecordForm({ pet, initialValues, submitLabel, onSubmit }) {
-  const [values, setValues] = useState(initialValues);
-  const [errors, setErrors] = useState({});
-  const [serverError, setServerError] = useState(null);
-  const [submitting, setSubmitting] = useState(false);
-
-  const petSummary = [pet.name, pet.species].filter(Boolean).join(' · ');
-
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setValues((prev) => ({ ...prev, [name]: value }));
-    if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: undefined }));
-    }
-  };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    setServerError(null);
-
-    const validationErrors = validateVaccinationRecord(values);
-    setErrors(validationErrors);
-    const firstInvalid = Object.keys(validationErrors)[0];
-    if (firstInvalid) {
-      document.getElementById(firstInvalid)?.focus();
-      return;
-    }
-
-    setSubmitting(true);
-    try {
-      await onSubmit(values);
-    } catch (error) {
-      setServerError(getVaccinationRecordErrorMessage(error));
-      setSubmitting(false);
-    }
-  };
-
-  const controlProps = (name, extraClass = '') => ({
-    id: name,
-    name,
-    value: values[name],
-    onChange: handleChange,
-    className: `form-control-brand${extraClass}${errors[name] ? ' form-control-brand--invalid' : ''}`,
-    'aria-invalid': errors[name] ? 'true' : undefined,
-    'aria-describedby': errors[name] ? `${name}-error` : undefined,
+  const { errors, serverError, submitting, handleSubmit, controlProps } = useEntityForm({
+    initialValues,
+    validate: validateVaccinationRecord,
+    onSubmit,
+    getErrorMessage: getVaccinationRecordErrorMessage,
   });
 
   return (
     <form className="form-card" onSubmit={handleSubmit} noValidate>
       {serverError && <AlertMessage>{serverError}</AlertMessage>}
 
-      <FormField id="petId" label="Mascota">
-        <select id="petId" className="form-control-brand" value={pet.id} disabled>
-          <option value={pet.id}>{petSummary}</option>
-        </select>
-      </FormField>
+      <LockedPetField pet={pet} />
 
       <FormField id="vaccinesApplied" label="Vacunas aplicadas" error={errors.vaccinesApplied}>
         <textarea

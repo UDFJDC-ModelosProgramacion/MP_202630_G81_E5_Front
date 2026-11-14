@@ -581,3 +581,6 @@ select.form-control-brand {
 .life-event-badge--surgery { background: #fdf3da; color: #8a5a00; }
 
 .life-event-detail__wide { grid-column: 1 / -1; overflow-wrap: anywhere; }
+
+.life-event-form__description { min-height: 100px; padding: 12px 18px; resize: vertical; }
+.life-event-form__description.form-control-brand--invalid { padding: 11px 17px; }
