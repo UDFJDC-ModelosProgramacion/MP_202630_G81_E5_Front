@@ -70,6 +70,12 @@ export default function PetDetailPage() {
        )}
 
         {pet && (
+         <Link to={`/mascotas/${pet.id}/eventos-de-vida`} className="btn-outline-brand">
+           Eventos de vida
+         </Link>
+       )}
+
+        {pet && (
           <Link to={`/mascotas/${pet.id}/editar`} className="btn-brand">
             Editar
           </Link>
