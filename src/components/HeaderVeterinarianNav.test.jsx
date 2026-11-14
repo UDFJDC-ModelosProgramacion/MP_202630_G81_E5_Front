@@ -6,6 +6,8 @@ import Header from './Header';
 
 afterEach(cleanup);
 
+const ACTIVE = 'app-nav__link--active';
+
 const renderAt = (path) =>
   render(
     <MemoryRouter initialEntries={[path]}>
@@ -13,26 +15,34 @@ const renderAt = (path) =>
     </MemoryRouter>,
   );
 
+const link = (name) => screen.getByRole('link', { name });
+
 describe('Header - sección de veterinarios', () => {
+  it('enlaza Veterinarios al listado de veterinarios', () => {
+    renderAt('/mascotas');
+    expect(link('Veterinarios').getAttribute('href')).toBe('/veterinarios');
+  });
+
   it.each([
     '/veterinarios',
     '/veterinarios/nuevo',
     '/veterinarios/3',
     '/veterinarios/3/editar',
-  ])('resalta Refugios en %s', (path) => {
+  ])('resalta Veterinarios, y no Refugios ni Mascotas, en %s', (path) => {
     renderAt(path);
-    expect(screen.getByRole('link', { name: 'Refugios' }).className).toContain(
-      'app-nav__link--active',
-    );
-    expect(screen.getByRole('link', { name: 'Mascotas' }).className).not.toContain(
-      'app-nav__link--active',
-    );
+    expect(link('Veterinarios').className).toContain(ACTIVE);
+    expect(link('Refugios').className).not.toContain(ACTIVE);
+    expect(link('Mascotas').className).not.toContain(ACTIVE);
   });
 
-  it('no resalta Refugios fuera de refugios y veterinarios', () => {
+  it('resalta Refugios y no Veterinarios en /refugios', () => {
+    renderAt('/refugios');
+    expect(link('Refugios').className).toContain(ACTIVE);
+    expect(link('Veterinarios').className).not.toContain(ACTIVE);
+  });
+
+  it('no resalta Veterinarios en otras secciones', () => {
     renderAt('/mascotas');
-    expect(screen.getByRole('link', { name: 'Refugios' }).className).not.toContain(
-      'app-nav__link--active',
-    );
+    expect(link('Veterinarios').className).not.toContain(ACTIVE);
   });
 });
