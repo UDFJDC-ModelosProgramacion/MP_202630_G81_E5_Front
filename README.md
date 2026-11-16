@@ -2,6 +2,9 @@
 
 Interfaz web del sistema de adopción de mascotas (curso Modelos de Programación, equipo G81-E5). Consume la API REST del back-end (`MP_202630_G81_E5_Back`).
 
+## Link Video Youtube
+https://youtu.be/g9VOqNI6fNc
+
 ## Tecnologías
 
 - React + Vite (JavaScript, sin TypeScript)
