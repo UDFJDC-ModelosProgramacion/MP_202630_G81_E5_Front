@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { deleteAdopter, getAdopters } from '../services/adopterService';
 import AdopterListPage from './AdopterListPage';
@@ -32,6 +32,7 @@ confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(true);
 afterEach(() => {
 confirmSpy.mockRestore();
 cleanup();
+delete Element.prototype.scrollIntoView;
 });
 
 describe('AdopterListPage', () => {
@@ -127,7 +128,6 @@ it('lleva el aviso a la vista cuando el borrado falla', async () => {
     await screen.findByText('Laura Gómez');
     clickDelete('Laura Gómez');
     await screen.findByRole('alert');
-    expect(scrollIntoView).toHaveBeenCalled();
-    delete Element.prototype.scrollIntoView;
+    await waitFor(() => expect(scrollIntoView).toHaveBeenCalled());
 });
 });
