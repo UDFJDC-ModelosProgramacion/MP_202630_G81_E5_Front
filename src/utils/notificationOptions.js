@@ -1,0 +1,2 @@
+export const NOTIFICATION_CHANNELS = ['EMAIL', 'SMS', 'PUSH'];
+export const DEFAULT_NOTIFICATION_CHANNEL = 'EMAIL';

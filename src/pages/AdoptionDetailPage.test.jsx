@@ -11,6 +11,10 @@ vi.mock('../services/adoptionService', () => ({
   deleteAdoption: vi.fn(),
 }));
 
+vi.mock('../components/TrialCohabitationPanel', () => ({
+  default: ({ adoptionId }) => <p>Panel de convivencia {adoptionId}</p>,
+}));
+
 const adoption = {
   id: 1,
   date: '2026-09-20T00:00:00.000+00:00',
@@ -87,6 +91,11 @@ describe('AdoptionDetailPage: consulta', () => {
     expect(
       screen.getByRole('link', { name: 'Volver al listado' }).getAttribute('href'),
     ).toBe('/adopciones');
+  });
+  it('muestra el panel de la convivencia de prueba de la adopción', async () => {
+    getAdoption.mockResolvedValue(adoption);
+    renderPage();
+    expect(await screen.findByText('Panel de convivencia 1')).toBeTruthy();
   });
 
   it('informa cuando la adopción no existe y no ofrece acciones', async () => {

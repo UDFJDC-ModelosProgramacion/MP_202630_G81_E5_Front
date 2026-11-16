@@ -1,12 +1,15 @@
-import { NavLink, useLocation } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 
 // Las secciones sin `to` siguen deshabilitadas hasta que se implemente su historia.
 const navItems = [
+  { label: 'Inicio', to: '/', end: true },
   { label: 'Mascotas', to: '/mascotas' },
-  { label: 'Adoptantes' },
+  { label: 'Adoptantes', to: '/adoptantes', notActive: /^\/adoptantes\/[^/]+\/resenas/ },
   { label: 'Adopciones', to: '/adopciones' },
   { label: 'Mis reseñas', to: '/mis-resenas', alsoActive: /^\/adoptantes\/[^/]+\/resenas/ },
-  { label: 'Refugios' },
+  { label: 'Mis mensajes', to: '/mis-mensajes', alsoActive: /^\/adoptantes\/[^/]+\/mensajes/ },
+  { label: 'Refugios', to: '/refugios' },
+  { label: 'Veterinarios', to: '/veterinarios' },
 ];
 
 export default function Header() {
@@ -14,7 +17,7 @@ export default function Header() {
 
   return (
     <header className="app-header">
-      <div className="app-brand">
+      <Link to="/" className="app-brand">
         <div className="app-brand__logo">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff" aria-hidden="true">
             <circle cx="5" cy="11" r="2.2" />
@@ -25,16 +28,16 @@ export default function Header() {
           </svg>
         </div>
         <span className="app-brand__name">AdoptaYa</span>
-      </div>
-
-            <nav className="app-nav" aria-label="Principal">
-        {navItems.map(({ label, to, alsoActive }) =>
+      </Link>
+      <nav className="app-nav" aria-label="Principal">
+        {navItems.map(({ label, to, end, alsoActive, notActive }) =>
           to ? (
             <NavLink
               key={label}
               to={to}
+              end={end}
               className={({ isActive }) =>
-                `app-nav__link${isActive || alsoActive?.test(pathname) ? ' app-nav__link--active' : ''}`
+                `app-nav__link${(isActive && !notActive?.test(pathname)) || alsoActive?.test(pathname) ? ' app-nav__link--active' : ''}`
               }
             >
               {label}
@@ -63,3 +66,4 @@ export default function Header() {
     </header>
   );
 }
+
