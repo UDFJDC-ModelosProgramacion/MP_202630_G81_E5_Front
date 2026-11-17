@@ -54,12 +54,7 @@ La aplicación queda en `http://localhost:5173`.
 Como administrador de refugio quiero registrar una mascota con nombre, especie y edad válidos para publicarla como disponible para adopción.
 
 **Cómo visualizarla**
-
-1. Levanta el back-end y carga datos de prueba (la base se borra al reiniciar el back):
-   ```powershell
-   .\infra\seed-data.ps1
-   ```
-2. Ejecuta `npm run dev` y abre `http://localhost:5173/mascotas`.
+1. Ejecuta `npm run dev` y abre `http://localhost:5173/mascotas`.
 
 | Criterio de aceptación | Dónde verlo |
 | --- | --- |
@@ -76,14 +71,7 @@ Como administrador de refugio quiero registrar una mascota con nombre, especie y
 Como administrador de refugio quiero asociar fotos a una mascota o a un refugio para mostrar su aspecto a los adoptantes.
 
 **Cómo visualizarla**
-
-1. Levanta el back-end y carga datos de prueba (la base se borra al reiniciar el back). Primero las mascotas y el refugio, luego las fotos:
-   ```powershell
-   .\infra\seed-data.ps1
-   .\infra\seed-fotos.ps1
-   ```
-   `seed-fotos.ps1` requiere las mascotas Luna y Michi y el refugio "Refugio Adopciones" (los crea `seed-data.ps1`). Crea 3 fotos para Luna, 1 para Michi y 2 para el refugio, e imprime sus ids; si el destino ya tiene fotos, lo omite. Si PowerShell bloquea el script: `powershell -ExecutionPolicy Bypass -File .\infra\seed-fotos.ps1`.
-2. Ejecuta `npm run dev`, abre `http://localhost:5173/mascotas` y pulsa "Fotos" en la fila de Luna. También se llega desde el detalle de una mascota y desde el detalle de un refugio.
+1. Ejecuta `npm run dev`, abre `http://localhost:5173/mascotas`.
 
 | Criterio de aceptación | Dónde verlo |
 | --- | --- |
@@ -101,14 +89,7 @@ Como administrador de refugio quiero asociar fotos a una mascota o a un refugio 
 Como administrador de refugio quiero cargar videos de mi refugio para que los adoptantes reconozcan las instalaciones.
 
 **Cómo visualizarla**
-
-1. Levanta el back-end y carga datos de prueba (la base se borra al reiniciar el back). Primero las mascotas y los refugios, luego los videos:
-   ```powershell
-   .\infra\seed-data.ps1
-   .\infra\seed-videos.ps1
-   ```
-    `seed-videos.ps1` usa los dos primeros refugios existentes (crea los que falten). Crea 3 videos en el primero (dos archivos `.mp4` y un enlace de YouTube, que se reproducen en el detalle y requieren internet) y 1 en el segundo, e imprime sus ids y las URLs de cada caso de prueba. Si PowerShell bloquea el script: `powershell -ExecutionPolicy Bypass -File .\infra\seed-videos.ps1`.
-2. Ejecuta `npm run dev`, abre `http://localhost:5173/refugios`, entra al detalle de un refugio y pulsa "Videos" (también puedes ir directo a `/refugios/:id/videos`).
+1. Ejecuta `npm run dev`, abre `http://localhost:5173/refugios`, entra al detalle de un refugio y pulsa "Videos" (también puedes ir directo a `/refugios/:id/videos`).
 
 | Criterio de aceptación | Dónde verlo |
 | --- | --- |
@@ -125,13 +106,7 @@ Como administrador de refugio quiero cargar videos de mi refugio para que los ad
 Como adoptante quiero calificar el proceso de adopción con una calificación de 1 a 5 y un comentario opcional para compartir mi experiencia y ayudar a mejorar el servicio.
 
 **Cómo visualizarla**
-
-1. Levanta el back-end y carga datos de prueba (la base se borra al reiniciar el back; el script se ejecuta una sola vez por arranque):
-   ```powershell
-   .\infra\seed-reviews.ps1
-   ```
-   Crea (o reutiliza) a Laura Gómez, con 3 reseñas (5, 4 y 4), y a Carlos Pérez, con 2 reseñas (una sin comentario). Si PowerShell bloquea el script: `powershell -ExecutionPolicy Bypass -File .\infra\seed-reviews.ps1`.
-2. Ejecuta `npm run dev` y abre `http://localhost:5173/mis-resenas`. Como todavía no hay inicio de sesión, "Mis reseñas" abre las reseñas del primer adoptante registrado (Laura).
+1. Ejecuta `npm run dev` y abre `http://localhost:5173/mis-resenas`. Como no hay inicio de sesión, "Mis reseñas" abre las reseñas del primer adoptante registrado.
 
 | Criterio de aceptación | Dónde verlo |
 | --- | --- |
@@ -149,13 +124,7 @@ Como adoptante quiero calificar el proceso de adopción con una calificación de
 Como administrador de refugio quiero registrar una adopción con fecha, estado, mascota, adoptante y veterinario responsable válidos para formalizar y hacer seguimiento al proceso.
 
 **Cómo visualizarla**
-
-1. Levanta el back-end y carga datos de prueba (la base se borra al reiniciar el back; el script se ejecuta una sola vez por arranque):
-   ```powershell
-   .\infra\seed-adoptions.ps1
-   ```
-   Crea 1 refugio, 2 veterinarios, 5 adoptantes, 7 mascotas y 5 adopciones (En curso, Aprobada y Devuelta). Toby y Mia quedan disponibles para probar el formulario. Si PowerShell bloquea el script: `powershell -ExecutionPolicy Bypass -File .\infra\seed-adoptions.ps1`.
-2. Ejecuta `npm run dev` y abre `http://localhost:5173/adopciones`.
+1. Ejecuta `npm run dev` y abre `http://localhost:5173/adopciones`.
 
 | Criterio de aceptación | Dónde verlo |
 | --- | --- |
@@ -176,14 +145,7 @@ Como administrador de refugio quiero registrar una adopción con fecha, estado, 
 Como administrador de refugio quiero registrar la devolución de una mascota adoptada con fecha y motivo para dejar constancia y poder volver a ofrecerla en adopción.
 
 **Cómo visualizarla**
-
-1. Levanta el back-end y carga datos de prueba (la base se borra al reiniciar el back; los scripts se ejecutan una sola vez por arranque y en este orden):
-   ```powershell
-   .\infra\seed-adoptions.ps1
-   .\infra\seed-returns.ps1
-   ```
-   El segundo registra la devolución de la adopción de Michi (Carlos Pérez) y deja las demás adopciones sin devolución. Si PowerShell bloquea un script: `powershell -ExecutionPolicy Bypass -File .\infra\seed-returns.ps1`.
-2. Ejecuta `npm run dev`, abre el detalle de una adopción (`/adopciones/:id`) y pulsa **Devolución**, o usa las URLs que imprime el script (`/adopciones/:id/devolucion`).
+1. Ejecuta `npm run dev`, abre el detalle de una adopción (`/adopciones/:id`) y pulsa **Devolución**.
 
 | Criterio de aceptación | Dónde verlo |
 | --- | --- |
@@ -200,13 +162,7 @@ Como administrador de refugio quiero registrar la devolución de una mascota ado
 Como adoptante quiero registrar mis datos personales (nombre, correo electrónico y teléfono) para poder participar en los procesos de adopción.
 
 **Cómo visualizarla**
-
-1. Levanta el back-end y carga datos de prueba (la base se borra al reiniciar el back; el script se ejecuta una sola vez por arranque):
-   ```powershell
-   .\infra\seed-adopters.ps1
-   ```
-   Crea (o reutiliza por correo) a Mariana Ruiz, Andrés Molina (sin teléfono) y Valentina Rojas, sin adopciones, y a Camilo Herrera, con una adopción de la mascota Canela, de modo que al eliminarlo el back responde 412. El correo de Mariana sirve para probar el correo repetido. Si PowerShell bloquea el script: `powershell -ExecutionPolicy Bypass -File .\infra\seed-adopters.ps1`.
-2. Ejecuta `npm run dev` y abre `http://localhost:5173/adoptantes`.
+1. Ejecuta `npm run dev` y abre `http://localhost:5173/adoptantes`.
 
 | Criterio de aceptación | Dónde verlo |
 | --- | --- |
@@ -217,24 +173,12 @@ Como adoptante quiero registrar mis datos personales (nombre, correo electrónic
 | 5. Editar adoptante | "Editar" → `/adoptantes/:id/editar` → "Guardar"; conservar el propio correo es válido y se conserva la dirección; un correo de otro adoptante se rechaza |
 | 6. Borrar adoptante | "Eliminar" (con confirmación) en Mariana o Valentina: desaparece del listado; en Camilo (tiene una adopción) el back responde 412 y se muestra el mensaje de rechazo |
 
-**Notas para quien revise**
-
-- El back usa `/adopters`; las rutas del front son `/adoptantes...`.
-- El back devuelve el error de correo repetido en inglés; el front lo traduce al español.
-- Al editar un adoptante que tiene adopciones, el PUT del back elimina esas adopciones (probado con Camilo: antes 1, después 0, y la adopción desaparece de `/api/adoptions`). Se probó reenviar `adoptions` sin `adopter` y con `adopter: { id }`, y en ambos casos se pierden. No tiene arreglo desde el front; queda pendiente para el equipo del back. Tras esa prueba hay que reiniciar el back, porque la mascota queda no disponible.
-
 ### HU08 — Gestionar convivencia de prueba
 
 Como administrador de refugio quiero registrar la convivencia de prueba de una adopción con fecha de inicio y fecha de fin opcional para hacer seguimiento al periodo de prueba.
 
 **Cómo visualizarla**
-
-1. Levanta el back-end y carga datos de prueba (la base se borra al reiniciar el back; el script se ejecuta una sola vez por arranque):
-   ```powershell
-   .\infra\seed-trial-cohabitation.ps1
-   ```
-   Crea (o reutiliza) el refugio, al veterinario Dr. Andrés Ríos, a la adoptante Laura Gómez y 4 adopciones: Firulais y Kira sin convivencia, Pelusa con fecha de inicio y de fin, y Bruno solo con fecha de inicio. Imprime los ids, las URLs y el JSON de la convivencia de Pelusa. Si PowerShell bloquea el script: `powershell -ExecutionPolicy Bypass -File .\infra\seed-trial-cohabitation.ps1`.
-2. Ejecuta `npm run dev`, abre `http://localhost:5173/adopciones` y entra al detalle de una adopción: la sección "Convivencia de prueba" muestra las fechas o el botón "Registrar convivencia".
+1. Ejecuta `npm run dev`, abre `http://localhost:5173/adopciones` y entra al detalle de una adopción: la sección "Convivencia de prueba" muestra las fechas o el botón "Registrar convivencia".
 
 | Criterio de aceptación | Dónde verlo |
 | --- | --- |
@@ -252,13 +196,7 @@ Como administrador de refugio quiero registrar la convivencia de prueba de una a
 Como administrador de refugio quiero enviar notificaciones por un canal válido (EMAIL, SMS o PUSH) con un mensaje para mantener informados a los usuarios.
 
 **Cómo visualizarla**
-
-1. Levanta el back-end y carga datos de prueba (la base se borra al reiniciar el back; el script se ejecuta una sola vez por arranque):
-   ```powershell
-   .\infra\seed-notifications.ps1
-   ```
-   Reutiliza los refugios existentes, crea notificaciones de prueba e imprime las URLs de los criterios 4 y 6. Si PowerShell bloquea el script: `powershell -ExecutionPolicy Bypass -File .\infra\seed-notifications.ps1`.
-2. Ejecuta `npm run dev`, abre el detalle de un refugio (`/refugios/:id`) y entra por el botón "Notificaciones", o directamente a `/refugios/:id/notificaciones`.
+1. Ejecuta `npm run dev`, abre el detalle de un refugio (`/refugios/:id`) y entra por el botón "Notificaciones", o directamente a `/refugios/:id/notificaciones`.
 
 | Criterio de aceptación | Dónde verlo |
 | --- | --- |
@@ -271,28 +209,12 @@ Como administrador de refugio quiero enviar notificaciones por un canal válido 
 | 7. Editar notificación | "Editar" en una notificación → cambiar canal o mensaje con valores válidos → "Guardar cambios"; se conserva la fecha; con valores inválidos se rechaza el cambio |
 | 8. Borrar notificación | "Eliminar" en una notificación propia → desaparece de la lista del refugio |
 
-**Notas para quien revise**
-
-- El back usa `/shelters/{shelterId}/notifications`; las rutas del front son `/refugios/:id/notificaciones`. Campos: `id`, `message`, `date`, `channel`, `shelter`.
-- El back no asigna `date` y el PUT la borra: el front la envía al crear (hoy a las 12:00 UTC) y la conserva al editar.
-- El back acepta mensajes con solo espacios; el front los rechaza. El back valida el mensaje antes que el canal.
-- Con un refugio inexistente el back responde 404 al listar o consultar, pero 412 ("Shelter is not valid") al crear; el front muestra "Refugio no encontrado." en ambos casos.
-- Una notificación de otro refugio da 412 con "not associated to the shelter"; el front la traduce.
-- El back responde en inglés y el front traduce los mensajes conocidos.
-- "Ver detalle" es un enlace discreto junto al badge porque el mockup no lo incluye. El detalle aún no muestra la fecha (falta revisar `utils/eventDates.js` para formatearla bien).
-
 ### HU10 — Gestionar refugios
 
 Como administrador quiero registrar y gestionar refugios con nombre y ciudad para mantener actualizado el listado de refugios aliados.
 
 **Cómo visualizarla**
-
-1. Levanta el back-end y carga datos de prueba (la base se borra al reiniciar el back; el script se ejecuta una sola vez por arranque):
-   ```powershell
-   .\infra\seed-data.ps1
-   ```
-   Crea "Refugio Adopciones" en Bogotá con 4 mascotas. Si PowerShell bloquea el script: `powershell -ExecutionPolicy Bypass -File .\infra\seed-data.ps1`. Si la ciudad se ve como "BogotÃ¡" (problema de codificación del script en Windows PowerShell), corrígela con "Editar" escribiendo `Bogotá`.
-2. Ejecuta `npm run dev` y abre `http://localhost:5173/refugios`.
+1. Ejecuta `npm run dev` y abre `http://localhost:5173/refugios`.
 
 | Criterio de aceptación | Dónde verlo |
 | --- | --- |
@@ -308,13 +230,7 @@ Como administrador quiero registrar y gestionar refugios con nombre y ciudad par
 Como administrador de refugio quiero programar y gestionar los eventos de un refugio (jornadas, ferias, vacunaciones) para que los adoptantes sepan qué actividades se realizan.
 
 **Cómo visualizarla**
-
-1. Levanta el back-end y carga datos de prueba (la base se borra al reiniciar el back; el script se ejecuta una sola vez por arranque):
-   ```powershell
-   .\infra\seed-eventos.ps1
-   ```
-   Crea (o reutiliza) "Refugio Adopciones" con 3 eventos (uno próximo con tipo "Jornada", uno ya realizado sin tipo y otro próximo) y un segundo refugio, "Refugio Huellitas", con 1 evento propio. Si el refugio ya tiene eventos, los omite. Si PowerShell bloquea el script: `powershell -ExecutionPolicy Bypass -File .\infra\seed-eventos.ps1`.
-2. Ejecuta `npm run dev`, abre `http://localhost:5173/refugios`, pulsa "Ver detalle" en un refugio y luego "Eventos" (o abre directamente `/refugios/:id/eventos`).
+1. Ejecuta `npm run dev`, abre `http://localhost:5173/refugios`, pulsa "Ver detalle" en un refugio y luego "Eventos" (o abre directamente `/refugios/:id/eventos`).
 
 | Criterio de aceptación | Dónde verlo |
 | --- | --- |
@@ -331,13 +247,7 @@ Como administrador de refugio quiero programar y gestionar los eventos de un ref
 Como adoptante quiero enviar y gestionar mis mensajes para comunicarme con el refugio durante el proceso de adopción.
 
 **Cómo visualizarla**
-
-1. Levanta el back-end y carga datos de prueba (la base se borra al reiniciar el back; el script se ejecuta una sola vez por arranque):
-   ```powershell
-   .\infra\seed-mensajes.ps1
-   ```
-   Crea (o reutiliza) a los adoptantes "Laura Gómez", con 3 mensajes, y "Carlos Pérez", con 2 mensajes propios. Si el adoptante ya tiene mensajes, los omite. Si tu back corre en otro puerto, agrega `-Base "http://localhost:8999/api"`. Si PowerShell bloquea el script: `powershell -ExecutionPolicy Bypass -File .\infra\seed-mensajes.ps1`.
-2. Ejecuta `npm run dev` y abre `http://localhost:5173/mis-mensajes` (el enlace "Mis mensajes" del menú); te lleva a los mensajes del primer adoptante registrado.
+1. Ejecuta `npm run dev` y abre `http://localhost:5173/mis-mensajes` (el enlace "Mis mensajes" del menú); te lleva a los mensajes del primer adoptante registrado.
 
 | Criterio de aceptación | Dónde verlo |
 | --- | --- |
@@ -354,13 +264,7 @@ Como adoptante quiero enviar y gestionar mis mensajes para comunicarme con el re
 Como administrador de refugio quiero registrar y administrar veterinarios con nombre, correo y especialidad válidos para asignarlos a adopciones y eventos de vida de las mascotas.
 
 **Cómo visualizarla**
-
-1. Levanta el back-end y carga datos de prueba (la base se borra al reiniciar el back; el script se ejecuta una sola vez por arranque):
-   ```powershell
-   .\infra\seed-veterinarian.ps1
-   ```
-   Crea (o reutiliza) "Refugio Adopciones" y registra 4 veterinarios: tres asignados a ese refugio y uno sin refugio. Si tu back corre en otro puerto, agrega `-ApiUrl "http://localhost:8999/api"`. Si PowerShell bloquea el script: `powershell -ExecutionPolicy Bypass -File .\infra\seed-veterinarian.ps1`.
-2. Ejecuta `npm run dev` y pulsa "Veterinarios" en el menú principal (o abre `http://localhost:5173/veterinarios`).
+1. Ejecuta `npm run dev` y pulsa "Veterinarios" en el menú principal (o abre `http://localhost:5173/veterinarios`).
 
 | Criterio de aceptación | Dónde verlo |
 | --- | --- |
@@ -376,14 +280,7 @@ Como administrador de refugio quiero registrar y administrar veterinarios con no
 Como administrador de refugio quiero registrar el carnet de vacunación de una mascota con las vacunas aplicadas para llevar el control de su salud y de su próxima vacuna.
 
 **Cómo visualizarla**
-
-1. Levanta el back-end y carga datos de prueba (la base se borra al reiniciar el back; los scripts se ejecutan una sola vez por arranque):
-   ```powershell
-   .\infra\seed-data.ps1
-   .\infra\seed-vaccination.ps1
-   ```
-   El primero crea las mascotas; el segundo registra un carnet a la primera mascota (Rabia, Parvovirus y Moquillo, próxima vacunación el 2027-08-01), deja a las demás sin carnet e imprime las URLs de ambos casos. Si tu back corre en otro puerto, agrega `-ApiUrl "http://localhost:8999/api"`. Si PowerShell bloquea el script: `powershell -ExecutionPolicy Bypass -File .\infra\seed-vaccination.ps1`.
-2. Ejecuta `npm run dev`, abre `http://localhost:5173/mascotas`, entra al detalle de una mascota y pulsa "Carnet de vacunación" (o abre directamente `/mascotas/:id/carnet`).
+1. Ejecuta `npm run dev`, abre `http://localhost:5173/mascotas`, entra al detalle de una mascota y pulsa "Carnet de vacunación" (o abre directamente `/mascotas/:id/carnet`).
 
 | Criterio de aceptación | Dónde verlo |
 | --- | --- |
@@ -401,15 +298,7 @@ Como administrador de refugio quiero registrar el carnet de vacunación de una m
 Como administrador de refugio quiero registrar eventos de vida de una mascota con tipo y fecha válidos, y opcionalmente el veterinario que los atendió, para mantener su historial.
 
 **Cómo visualizarla**
-
-1. Levanta el back-end y carga datos de prueba (la base se borra al reiniciar el back; los scripts se ejecutan una sola vez por arranque):
-   ```powershell
-   .\infra\seed-data.ps1
-   .\infra\seed-veterinarian.ps1
-   .\infra\seed-lifeevents.ps1
-   ```
-   El tercero registra tres eventos a la primera mascota (Vacunación el 10 may 2026, Control el 2 mar 2026 y Cirugía el 15 ene 2026), asignados a los veterinarios si existen, deja a las demás sin eventos e imprime las URLs de cada caso, incluida la de un evento de otra mascota. Si tu back corre en otro puerto, agrega `-ApiUrl "http://localhost:8999/api"`. Si PowerShell bloquea el script: `powershell -ExecutionPolicy Bypass -File .\infra\seed-lifeevents.ps1`.
-2. Ejecuta `npm run dev`, abre `http://localhost:5173/mascotas`, entra al detalle de una mascota y pulsa "Eventos de vida" (o abre directamente `/mascotas/:id/eventos-de-vida`).
+1. Ejecuta `npm run dev`, abre `http://localhost:5173/mascotas`, entra al detalle de una mascota y pulsa "Eventos de vida" (o abre directamente `/mascotas/:id/eventos-de-vida`).
 
 | Criterio de aceptación | Dónde verlo |
 | --- | --- |
@@ -420,52 +309,6 @@ Como administrador de refugio quiero registrar eventos de vida de una mascota co
 | 5. Evento de otra mascota | Abrir la URL "Evento de otra mascota" que imprime el script (y su `/editar`) → "Este evento no pertenece a la mascota."; guardar o eliminar desde otra mascota está cubierto por pruebas |
 | 6. Editar evento | "Editar" → `/mascotas/:id/eventos-de-vida/:eventId/editar` → "Guardar cambios"; la mascota queda bloqueada y se conserva; el veterinario se puede cambiar o quitar; tipo o fecha vacíos se rechazan |
 | 7. Borrar evento | "Eliminar" (con confirmación) → "Evento eliminado correctamente." y desaparece de la lista; si ya no existe → "Evento de vida no encontrado." |
-
-### HU10 — Gestionar refugios
-
-Como administrador quiero registrar y gestionar refugios con nombre y ciudad para mantener actualizado el listado de refugios aliados.
-
-**Cómo visualizarla**
-
-1. Levanta el back-end y carga datos de prueba (la base se borra al reiniciar el back; el script se ejecuta una sola vez por arranque):
-   ```powershell
-   .\infra\seed-data.ps1
-   ```
-   Crea "Refugio Adopciones" en Bogotá con 4 mascotas. Si PowerShell bloquea el script: `powershell -ExecutionPolicy Bypass -File .\infra\seed-data.ps1`. Si la ciudad se ve como "BogotÃ¡" (problema de codificación del script en Windows PowerShell), corrígela con "Editar" escribiendo `Bogotá`.
-2. Ejecuta `npm run dev` y abre `http://localhost:5173/refugios`.
-
-| Criterio de aceptación | Dónde verlo |
-| --- | --- |
-| 1. Registrar refugio válido | `/refugios/nuevo` → nombre y ciudad → "Registrar refugio"; aviso verde y aparece en el listado |
-| 2. Nombre o ciudad vacíos | Enviar el formulario vacío → "El nombre es obligatorio." y "La ciudad es obligatoria." |
-| 3. Refugio repetido | Registrar el mismo nombre en la misma ciudad (por ejemplo "Refugio Adopciones" en "Bogotá") → "Ya existe un refugio con este nombre en esta ciudad."; el mismo nombre en otra ciudad sí se crea |
-| 4. Consultar refugios | `/refugios` (listado con mascotas y eventos) y "Ver detalle" → `/refugios/:id`; si no existe (`/refugios/9999`), "Refugio no encontrado." |
-| 5. Editar refugio | "Editar" → `/refugios/:id/editar` → "Guardar cambios"; el refugio conserva sus mascotas; nombre o ciudad vacíos se rechazan |
-| 6. Eliminar refugio | "Eliminar" (con confirmación); si tiene mascotas, eventos u otros datos asociados se muestra "No se puede eliminar …"; si no tiene, desaparece del listado |
-
-### HU11 — Gestionar eventos del refugio
-
-Como administrador de refugio quiero programar y gestionar los eventos de un refugio (jornadas, ferias, vacunaciones) para que los adoptantes sepan qué actividades se realizan.
-
-**Cómo visualizarla**
-
-1. Levanta el back-end y carga datos de prueba (la base se borra al reiniciar el back; el script se ejecuta una sola vez por arranque):
-   ```powershell
-   .\infra\seed-eventos.ps1
-   ```
-   Crea (o reutiliza) "Refugio Adopciones" con 3 eventos (uno próximo con tipo "Jornada", uno ya realizado sin tipo y otro próximo) y un segundo refugio, "Refugio Huellitas", con 1 evento propio. Si el refugio ya tiene eventos, los omite. Si PowerShell bloquea el script: `powershell -ExecutionPolicy Bypass -File .\infra\seed-eventos.ps1`.
-2. Ejecuta `npm run dev`, abre `http://localhost:5173/refugios`, pulsa "Ver detalle" en un refugio y luego "Eventos" (o abre directamente `/refugios/:id/eventos`).
-
-| Criterio de aceptación | Dónde verlo |
-| --- | --- |
-| 1. Crear evento válido | En `/refugios/:id/eventos`, panel "Nuevo evento": escribir nombre y fecha (el tipo es opcional) → "Programar evento"; aparece una tarjeta con la insignia "Próximo" (o "Realizado" si la fecha ya pasó) y el aviso "Evento programado correctamente." |
-| 2. Datos obligatorios | "Programar evento" con el formulario vacío → "El nombre es obligatorio." y "La fecha es obligatoria."; lo mismo al guardar un evento editado sin nombre o sin fecha |
-| 3. Refugio inexistente | `/refugios/9999/eventos` → "Refugio no encontrado."; no se muestra el formulario |
-| 4. Consultar eventos | `/refugios/:id/eventos` (lista) y "Ver detalle" → `/refugios/:id/eventos/:eventId` con nombre, fecha, tipo y estado; si el evento no existe (`/refugios/1/eventos/9999`), "Evento no encontrado." |
-| 5. Evento de otro refugio | El script imprime una URL con el evento de Huellitas bajo el primer refugio → "Este evento pertenece a otro refugio."; lo mismo ocurre al editarlo o eliminarlo |
-| 6. Editar evento | "Editar" en una tarjeta → el panel pasa a "Editar evento" con los datos cargados → "Guardar cambios"; el evento conserva su refugio y el botón "Cancelar" vuelve al formulario nuevo |
-| 7. Borrar evento | "Eliminar" (con confirmación) en un evento próximo: desaparece de la lista; en un evento ya realizado → "No se puede eliminar un evento que ya ocurrió." y la tarjeta se queda |
-
 ## Pruebas
 
 ```powershell
@@ -488,13 +331,6 @@ docker compose -f infra/docker-compose.yml up -d
 | Jenkins | `http://localhost:8081` |
 
 El `Jenkinsfile` ejecuta lint, build, pruebas con cobertura y el análisis de SonarQube, esperando el Quality Gate (configuración en `sonar-project.properties`).
-
-## Flujo de trabajo (Git Flow)
-
-- Una rama por historia: `feature/nombre-de-la-historia-id` (ej. `feature/registrar-mascota-hu01`).
-- Prohibido subir directo a `main` o `develop`.
-- Todo cambio entra por Pull Request con la aprobación de al menos un compañero.
-
 ## Estructura del proyecto
 
 ```
